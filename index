@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de las 8 Damas</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            margin: 0;
+        }
+
+        h1 {
+            margin-top: 10px;
+            font-size: 6vw;
+        }
+
+        #instrucciones {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 14px;
+            margin: 12px 0;
+            font-size: 4vw;
+            line-height: 1.5;
+            text-align: justify;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+
+        .controles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        #contador {
+            font-size: 4vw;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background-color: #eee;
+            color: #333;
+        }
+
+        #tablero-container {
+            background-color: #333;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        #tablero {
+            display: flex;
+            flex-direction: column;
+            border: 4px solid #222;
+        }
+
+        .casilla {
+            width: 9vw;
+            height: 9vw;
+            max-width: 60px;
+            max-height: 60px;
+            font-size: 9vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .blanca { background-color: #f0d9b5; }
+        .negra { background-color: #b58863; }
+
+        .casilla:hover {
+            transform: scale(1.05);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .conflicto, .en-conflicto {
+            color: rgb(230, 2, 2);
+            
+            
+        }
+
+        #mensaje, #tiempo {
+            font-size: 4vw;
+            margin: 8px;
+            font-weight: bold;
+        }
+
+        button, select {
+            padding: 8px 16px;
+            font-size: 4vw;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #reset {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #resultado {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #006600;
+            font-size: 4.5vw;
+        }
+
+        .social-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .social-buttons button {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .fila-con-coord {
+            display: flex;
+        }
+
+        .coord-num, .coord-esquina {
+            width: 9vw;
+            max-width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #222;
+            color: #f8f8f8;
+            font-weight: bold;
+            font-size: 3.5vw;
+        }
+
+        .coord-letras {
+            display: flex;
+        }
+
+        .coord-letra {
+            width: 9vw;
+            max-width: 60px;
+            text-align: center;
+            background-color: #222;
+            color: #f8f8f8;
+            font-weight: bold;
+            font-size: 3.5vw;
+        }
+
+        @media (min-width: 768px) {
+            h1 { font-size: 28px; }
+            #instrucciones { font-size: 15px; }
+            #contador, #tiempo, #mensaje, #resultado { font-size: 18px; }
+            .casilla { width: 60px; height: 60px; font-size: 56px; }
+            button, select { font-size: 15px; }
+            .coord-num, .coord-letra, .coord-esquina { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+<h1>El Juego de las 8 Damas</h1>
+    <div id="instrucciones">
+        El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.
+        
+    </div>
+
+    <div class="controles">
+        <label for="tamano">Tamaño del tablero:</label>
+        <select id="tamano" onchange="cambiarTamano(this.value)">
+            <option value="8" selected>8x8</option>
+            <option value="9">9x9</option>
+            <option value="10">10x10</option>
+            <option value="11">11x11</option>
+        </select>
+        <div id="contador">Damas en el tablero: 0 / 8</div>
+    </div>
+
+    <div id="tablero-container">
+        <div id="tablero"></div>
+    </div>
+
+    <div id="mensaje"></div>
+    <div id="tiempo">Tiempo: 0m 0s</div>
+    <button id="reset" onclick="resetear()">Vaciar tablero</button>
+    <div id="resultado"></div>
+
+    <div id="compartirFinal" class="social-container" style="display:none;">
+        <div><strong>Compartir tu resultado en:</strong></div>
+        <div class="social-buttons">
+            <button onclick="compartirResultado('x')">X</button>
+            <button onclick="compartirResultado('whatsapp')">WhatsApp</button>
+            <button onclick="compartirResultado('telegram')">Telegram</button>
+            <button onclick="compartirResultado('facebook')">Facebook</button>
+        </div>
+    </div>
+
+    <div class="social-container">
+        <div><strong>Compartir en:</strong></div>
+        <div class="social-buttons">
+            <button onclick="compartir('x')">X</button>
+            <button onclick="compartir('whatsapp')">WhatsApp</button>
+            <button onclick="compartir('telegram')">Telegram</button>
+            <button onclick="compartir('facebook')">Facebook</button>
+        </div>
+    </div>
+
+    <script>
+        const tablero = document.getElementById("tablero");
+        const mensaje = document.getElementById("mensaje");
+        const contador = document.getElementById("contador");
+        const tiempoDiv = document.getElementById("tiempo");
+        const resultado = document.getElementById("resultado");
+        const compartirFinal = document.getElementById("compartirFinal");
+
+        let damas = [];
+        let tiempo = 0;
+        let intervalo = null;
+        let juegoEnCurso = false;
+        let tamanoTablero = 8;
+        let conflictos = [];
+
+        function iniciarTemporizador() {
+            if (!intervalo) {
+                juegoEnCurso = true;
+                intervalo = setInterval(() => {
+                    tiempo++;
+                    const minutos = Math.floor(tiempo / 60);
+                    const segundos = tiempo % 60;
+                    tiempoDiv.textContent = `Tiempo: ${minutos}m ${segundos}s`;
+                }, 1000);
+            }
+        }
+
+        function detenerTemporizador() {
+            juegoEnCurso = false;
+            clearInterval(intervalo);
+            intervalo = null;
+        }
+
+        function cambiarTamano(nuevoTamano) {
+            tamanoTablero = parseInt(nuevoTamano);
+            tiempo = 0;
+            detenerTemporizador();
+            tiempoDiv.textContent = "Tiempo: 0m 0s";
+            resetear();
+        }
+
+        function crearTablero() {
+            tablero.innerHTML = "";
+            for (let fila = 0; fila < tamanoTablero; fila++) {
+                const filaCompleta = document.createElement("div");
+                filaCompleta.className = "fila-con-coord";
+
+                const numero = document.createElement("div");
+                numero.className = "coord-num";
+                numero.textContent = tamanoTablero - fila;
+                filaCompleta.appendChild(numero);
+
+                const row = document.createElement("div");
+                row.style.display = "flex";
+                for (let col = 0; col < tamanoTablero; col++) {
+                    const casilla = document.createElement("div");
+                    casilla.className = "casilla";
+                    casilla.classList.add((fila + col) % 2 === 1 ? "blanca" : "negra");
+                    casilla.dataset.fila = fila;
+                    casilla.dataset.col = col;
+                    casilla.onclick = () => manejarClick(fila, col);
+                    const dama = damas.find(d => d.fila === fila && d.col === col);
+                    if (dama) {
+                        casilla.textContent = "♕";
+                        if (conflictos.some(c => c.fila === fila && c.col === col)) {
+                            casilla.classList.add("en-conflicto");
+                        }
+                    }
+                    row.appendChild(casilla);
+                }
+                filaCompleta.appendChild(row);
+                tablero.appendChild(filaCompleta);
+            }
+
+            const letrasDiv = document.createElement("div");
+            letrasDiv.className = "coord-letras";
+            letrasDiv.innerHTML = `<div class="coord-esquina"></div>`;
+
+            for (let col = 0; col < tamanoTablero; col++) {
+                const letra = document.createElement("div");
+                letra.className = "coord-letra";
+                letra.textContent = String.fromCharCode(65 + col);
+                letrasDiv.appendChild(letra);
+            }
+            tablero.appendChild(letrasDiv);
+        }
+
+        function manejarClick(fila, col) {
+            if (!juegoEnCurso) iniciarTemporizador();
+            const index = damas.findIndex(d => d.fila === fila && d.col === col);
+            if (index >= 0) {
+                damas.splice(index, 1);
+            } else if (damas.length < tamanoTablero) {
+                damas.push({ fila, col });
+            }
+            actualizarEstado();
+        }
+
+        function detectarConflictos() {
+            const conflictivas = [];
+            for (let i = 0; i < damas.length; i++) {
+                for (let j = i + 1; j < damas.length; j++) {
+                    const d1 = damas[i], d2 = damas[j];
+                    if (d1.fila === d2.fila || d1.col === d2.col || Math.abs(d1.fila - d2.fila) === Math.abs(d1.col - d2.col)) {
+                        if (!conflictivas.find(d => d.fila === d1.fila && d.col === d1.col)) conflictivas.push(d1);
+                        if (!conflictivas.find(d => d.fila === d2.fila && d.col === d2.col)) conflictivas.push(d2);
+                    }
+                }
+            }
+            return conflictivas;
+        }
+
+        function actualizarEstado() {
+            conflictos = [];
+            contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
+            if (damas.length === tamanoTablero) {
+                conflictos = detectarConflictos();
+                if (conflictos.length > 0) {
+                    mensaje.textContent = "Hay conflictos entre las damas.";
+                    contador.style.backgroundColor = "#ffcccc";
+                } else {
+                    mensaje.textContent = "";
+                    contador.style.backgroundColor = "#ccffcc";
+                    detenerTemporizador();
+                    const minutos = Math.floor(tiempo / 60);
+                    const segundos = tiempo % 60;
+                    resultado.innerHTML = `✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨`;
+                    compartirFinal.style.display = "flex";
+                }
+            } else {
+                mensaje.textContent = "";
+                resultado.textContent = "";
+                contador.style.backgroundColor = "#eee";
+                compartirFinal.style.display = "none";
+            }
+            crearTablero();
+        }
+
+        function resetear() {
+            damas = [];
+            conflictos = [];
+            crearTablero();
+            mensaje.textContent = "";
+            contador.style.backgroundColor = "#eee";
+            contador.textContent = `Damas en el tablero: 0 / ${tamanoTablero}`;
+            resultado.textContent = "";
+            compartirFinal.style.display = "none";
+       }
+
+        
+
+        function compartir(red) {
+    const url = "https://deft-froyo-61839c.netlify.app/";
+    const texto = "El problema de las 8 Damas. ¿En cuánto tiempo serás capaz de resolverlo?";
+    abrirRedSocial(red, url, texto);
+}
+
+function compartir(red) {
+    const url = "https://deft-froyo-61839c.netlify.app/";
+    const texto = "El problema de las 8 Damas. ¿En cuánto tiempo serás capaz de resolverlo?";
+    abrirRedSocial(red, url, texto);
+}
+
+function compartirResultado(red) {
+    const url = "https://deft-froyo-61839c.netlify.app/";
+    const minutos = Math.floor(tiempo / 60);
+    const segundos = tiempo % 60;
+    let texto = `He resuelto el reto de las Damas en ${minutos}m ${segundos}s.`;
+    if (tamanoTablero !== 8) texto += ` Tablero de ${tamanoTablero}x${tamanoTablero}.`;
+    abrirRedSocial(red, url, texto);
+}
+
+function abrirRedSocial(red, url, texto) {
+    const mensajeCompleto = encodeURIComponent(`${texto} ${url}`);
+    const urlCodificada = encodeURIComponent(url);
+    let shareUrl = "";
+
+    switch (red) {
+        case 'x':
+            shareUrl = `https://twitter.com/intent/tweet?text=${mensajeCompleto}`;
+            break;
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${mensajeCompleto}`;
+            break;
+       case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${url}&text=${texto}`;
+                    break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${urlCodificada}`;
+            break;
+    }
+
+    window.open(shareUrl, '_blank');
+}
+
+        crearTablero();
+    </script>
+</body>
+</html>
