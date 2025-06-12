@@ -177,6 +177,20 @@
             button, select { font-size: 15px; }
             .coord-num, .coord-letra, .coord-esquina { font-size: 14px; }
         }
+
+                .coord-num, .coord-letra, .coord-esquina { font-size: 14px; }
+
+        /* ← AÑADE AQUÍ ↓ */
+        @media (prefers-color-scheme: dark) {
+            body, h1, #instrucciones, #contador, #tablero-container,
+            .casilla, .blanca, .negra, .coord-num, .coord-letra, .coord-esquina {
+                color-scheme: only light;
+                background-color: unset !important;
+                color: unset !important;
+                filter: none !important;
+            }
+        }
+
     </style>
 </head>
 <body>
