@@ -177,6 +177,35 @@
             button, select { font-size: 15px; }
             .coord-num, .coord-letra, .coord-esquina { font-size: 14px; }
         }
+
+        /* Fuerza el estilo claro en modo oscuro del navegador */
+@media (prefers-color-scheme: dark) {
+    body, #instrucciones, #tablero-container, .blanca, .negra, .coord-num, .coord-letra, .coord-esquina {
+        color-scheme: light;
+        background-color: unset;
+        color: unset;
+    }
+
+    .blanca { background-color: #f0d9b5 !important; }
+    .negra { background-color: #b58863 !important; }
+
+    .coord-num, .coord-letra, .coord-esquina {
+        background-color: #222 !important;
+        color: #f8f8f8 !important;
+    }
+
+    #instrucciones {
+    background-color: #dddddd !important;
+    color: #111 !important;
+}
+
+
+    #contador {
+    background-color: #e0e0e0 !important;
+    color: #222 !important;
+}
+}
+
     </style>
 </head>
 <body>
@@ -427,5 +456,3 @@ function abrirRedSocial(red, url, texto) {
 </body>
 </html>
 
-</body>
-</html>
