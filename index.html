@@ -2,15 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de las 8 Damas</title>
-    
-<meta name="color-scheme" content="only light">
-
     <style>
-        :root {
-    color-scheme: only light;
-}
-
         body {
             background-color: #f0f0f0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -23,17 +17,18 @@
 
         h1 {
             margin-top: 10px;
-            font-size: 28px;
+            font-size: 6vw;
         }
 
         #instrucciones {
+            width: 90%;
             max-width: 600px;
             background-color: #ffffff;
             border: 2px solid #ccc;
             border-radius: 8px;
             padding: 14px;
             margin: 12px 0;
-            font-size: 15px;
+            font-size: 4vw;
             line-height: 1.5;
             text-align: justify;
             box-shadow: 0 0 8px rgba(0,0,0,0.1);
@@ -41,13 +36,14 @@
 
         .controles {
             display: flex;
-            gap: 20px;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
             margin-bottom: 10px;
         }
 
         #contador {
-            font-size: 18px;
+            font-size: 4vw;
             font-weight: bold;
             padding: 8px 14px;
             border-radius: 8px;
@@ -61,6 +57,7 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             margin: 15px 0;
+            overflow-x: auto;
         }
 
         #tablero {
@@ -70,63 +67,44 @@
         }
 
         .casilla {
-            width: 60px;
-            height: 60px;
-            font-size: 56px;
+            width: 9vw;
+            height: 9vw;
+            max-width: 60px;
+            max-height: 60px;
+            font-size: 9vw;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             user-select: none;
-            position: relative;
         }
 
-        .blanca {
-            background-color: #f0d9b5;
-        }
-
-        .negra {
-            background-color: #b58863;
-        }
+        .blanca { background-color: #f0d9b5; }
+        .negra { background-color: #b58863; }
 
         .casilla:hover {
             transform: scale(1.05);
             box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
         }
 
-        .conflicto {
-            color: rgb(168, 61, 61);
-            font-weight: bold;
-            text-shadow: 0 0 5px rgb(9, 3, 3);
+        .conflicto, .en-conflicto {
+            color: rgb(245, 3, 3);
+            
+            
         }
 
-        .en-conflicto {
-            color: red;
-        }
-
-        #mensaje {
-            font-size: 16px;
-            color: red;
-            margin: 8px;
-            height: 22px;
-        }
-
-        #tiempo {
-            font-size: 16px;
+        #mensaje, #tiempo {
+            font-size: 4vw;
             margin: 8px;
             font-weight: bold;
         }
 
         button, select {
-            padding: 10px 20px;
-            font-size: 15px;
+            padding: 8px 16px;
+            font-size: 4vw;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-        }
-
-        button:hover, select:hover {
-            opacity: 0.9;
         }
 
         #reset {
@@ -138,7 +116,7 @@
             margin-top: 10px;
             font-weight: bold;
             color: #006600;
-            font-size: 18px;
+            font-size: 4.5vw;
         }
 
         .social-container {
@@ -151,7 +129,9 @@
 
         .social-buttons {
             display: flex;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
 
         .social-buttons button {
@@ -160,40 +140,47 @@
         }
 
         .fila-con-coord {
-    display: flex;
-}
+            display: flex;
+        }
 
-.coord-num {
-    width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #222;   /* Fondo oscuro para contraste */
-    color: #f8f8f8;           /* Texto claro */
-    font-weight: bold;
-}
+        .coord-num, .coord-esquina {
+            width: 9vw;
+            max-width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #222;
+            color: #f8f8f8;
+            font-weight: bold;
+            font-size: 3.5vw;
+        }
 
-.coord-letras {
-    display: flex;
-}
+        .coord-letras {
+            display: flex;
+        }
 
-.coord-letra {
-    width: 60px;
-    text-align: center;
-    background-color: #222;   /* Fondo oscuro a juego */
-    color: #f8f8f8;           /* Texto claro */
-    font-weight: bold;
-}
+        .coord-letra {
+            width: 9vw;
+            max-width: 60px;
+            text-align: center;
+            background-color: #222;
+            color: #f8f8f8;
+            font-weight: bold;
+            font-size: 3.5vw;
+        }
 
-.coord-esquina {
-    width: 20px;
-    background-color: #222;
-    color: #f8f8f8;
-}
+        @media (min-width: 768px) {
+            h1 { font-size: 28px; }
+            #instrucciones { font-size: 15px; }
+            #contador, #tiempo, #mensaje, #resultado { font-size: 18px; }
+            .casilla { width: 60px; height: 60px; font-size: 56px; }
+            button, select { font-size: 15px; }
+            .coord-num, .coord-letra, .coord-esquina { font-size: 14px; }
+        }
     </style>
 </head>
 <body>
-    <h1>El Juego de las 8 Damas</h1>
+<h1>El Juego de las 8 Damas</h1>
     <div id="instrucciones">
         El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.
         
@@ -261,7 +248,7 @@
                     tiempo++;
                     const minutos = Math.floor(tiempo / 60);
                     const segundos = tiempo % 60;
-                    tiempoDiv.textContent = `Tiempo: ${minutos}m ${segundos}s`;
+                    tiempoDiv.textContent = Tiempo: ${minutos}m ${segundos}s;
                 }, 1000);
             }
         }
@@ -296,7 +283,8 @@
                 for (let col = 0; col < tamanoTablero; col++) {
                     const casilla = document.createElement("div");
                     casilla.className = "casilla";
-                    casilla.classList.add((fila + col) % 2 === 1 ? "blanca" : "negra");
+                   casilla.classList.add((fila + col) % 2 === 0 ? "blanca" : "negra");
+
                     casilla.dataset.fila = fila;
                     casilla.dataset.col = col;
                     casilla.onclick = () => manejarClick(fila, col);
@@ -315,7 +303,7 @@
 
             const letrasDiv = document.createElement("div");
             letrasDiv.className = "coord-letras";
-            letrasDiv.innerHTML = `<div class="coord-esquina"></div>`;
+            letrasDiv.innerHTML = <div class="coord-esquina"></div>;
 
             for (let col = 0; col < tamanoTablero; col++) {
                 const letra = document.createElement("div");
@@ -353,7 +341,7 @@
 
         function actualizarEstado() {
             conflictos = [];
-            contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
+            contador.textContent = Damas en el tablero: ${damas.length} / ${tamanoTablero};
             if (damas.length === tamanoTablero) {
                 conflictos = detectarConflictos();
                 if (conflictos.length > 0) {
@@ -365,7 +353,7 @@
                     detenerTemporizador();
                     const minutos = Math.floor(tiempo / 60);
                     const segundos = tiempo % 60;
-                    resultado.innerHTML = `✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨`;
+                    resultado.innerHTML = ✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨;
                     compartirFinal.style.display = "flex";
                 }
             } else {
@@ -383,7 +371,7 @@
             crearTablero();
             mensaje.textContent = "";
             contador.style.backgroundColor = "#eee";
-            contador.textContent = `Damas en el tablero: 0 / ${tamanoTablero}`;
+            contador.textContent = Damas en el tablero: 0 / ${tamanoTablero};
             resultado.textContent = "";
             compartirFinal.style.display = "none";
        }
@@ -391,43 +379,43 @@
         
 
         function compartir(red) {
-    const url = "https://juegodelas8damas.netlify.app";
+    const url = "https://deft-froyo-61839c.netlify.app/";
     const texto = "El problema de las 8 Damas. ¿En cuánto tiempo serás capaz de resolverlo?";
     abrirRedSocial(red, url, texto);
 }
 
 function compartir(red) {
-    const url = "https://juegodelas8damas.netlify.app";
+    const url = "https://deft-froyo-61839c.netlify.app/";
     const texto = "El problema de las 8 Damas. ¿En cuánto tiempo serás capaz de resolverlo?";
     abrirRedSocial(red, url, texto);
 }
 
 function compartirResultado(red) {
-    const url = "https://juegodelas8damas.netlify.app";
+    const url = "https://deft-froyo-61839c.netlify.app/";
     const minutos = Math.floor(tiempo / 60);
     const segundos = tiempo % 60;
-    let texto = `He resuelto el reto de las Damas en ${minutos}m ${segundos}s.`;
-    if (tamanoTablero !== 8) texto += ` Tablero de ${tamanoTablero}x${tamanoTablero}.`;
+    let texto = He resuelto el reto de las Damas en ${minutos}m ${segundos}s.;
+    if (tamanoTablero !== 8) texto +=  Tablero de ${tamanoTablero}x${tamanoTablero}.;
     abrirRedSocial(red, url, texto);
 }
 
 function abrirRedSocial(red, url, texto) {
-    const mensajeCompleto = encodeURIComponent(`${texto} ${url}`);
+    const mensajeCompleto = encodeURIComponent(${texto} ${url});
     const urlCodificada = encodeURIComponent(url);
     let shareUrl = "";
 
     switch (red) {
         case 'x':
-            shareUrl = `https://twitter.com/intent/tweet?text=${mensajeCompleto}`;
+            shareUrl = https://twitter.com/intent/tweet?text=${mensajeCompleto};
             break;
         case 'whatsapp':
-            shareUrl = `https://wa.me/?text=${mensajeCompleto}`;
+            shareUrl = https://wa.me/?text=${mensajeCompleto};
             break;
        case 'telegram':
-                    shareUrl = `https://t.me/share/url?url=${url}&text=${texto}`;
+                    shareUrl = https://t.me/share/url?url=${url}&text=${texto};
                     break;
         case 'facebook':
-            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${urlCodificada}`;
+            shareUrl = https://www.facebook.com/sharer/sharer.php?u=${urlCodificada};
             break;
     }
 
@@ -436,5 +424,8 @@ function abrirRedSocial(red, url, texto) {
 
         crearTablero();
     </script>
+</body>
+</html>
+
 </body>
 </html>
