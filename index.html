@@ -248,7 +248,7 @@
                     tiempo++;
                     const minutos = Math.floor(tiempo / 60);
                     const segundos = tiempo % 60;
-                    tiempoDiv.textContent = Tiempo: ${minutos}m ${segundos}s;
+                    tiempoDiv.textContent = `Tiempo: ${minutos}m ${segundos}s`;
                 }, 1000);
             }
         }
@@ -303,7 +303,7 @@
 
             const letrasDiv = document.createElement("div");
             letrasDiv.className = "coord-letras";
-            letrasDiv.innerHTML = <div class="coord-esquina"></div>;
+            letrasDiv.innerHTML = `<div class="coord-esquina"></div>`;
 
             for (let col = 0; col < tamanoTablero; col++) {
                 const letra = document.createElement("div");
@@ -341,7 +341,7 @@
 
         function actualizarEstado() {
             conflictos = [];
-            contador.textContent = Damas en el tablero: ${damas.length} / ${tamanoTablero};
+            contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
             if (damas.length === tamanoTablero) {
                 conflictos = detectarConflictos();
                 if (conflictos.length > 0) {
@@ -353,7 +353,7 @@
                     detenerTemporizador();
                     const minutos = Math.floor(tiempo / 60);
                     const segundos = tiempo % 60;
-                    resultado.innerHTML = ✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨;
+                    resultado.innerHTML = `✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨`;
                     compartirFinal.style.display = "flex";
                 }
             } else {
@@ -371,7 +371,7 @@
             crearTablero();
             mensaje.textContent = "";
             contador.style.backgroundColor = "#eee";
-            contador.textContent = Damas en el tablero: 0 / ${tamanoTablero};
+            contador.textContent = `Damas en el tablero: 0 / ${tamanoTablero}`;
             resultado.textContent = "";
             compartirFinal.style.display = "none";
        }
@@ -394,28 +394,28 @@ function compartirResultado(red) {
     const url = "https://deft-froyo-61839c.netlify.app/";
     const minutos = Math.floor(tiempo / 60);
     const segundos = tiempo % 60;
-    let texto = He resuelto el reto de las Damas en ${minutos}m ${segundos}s.;
-    if (tamanoTablero !== 8) texto +=  Tablero de ${tamanoTablero}x${tamanoTablero}.;
+    let texto = `He resuelto el reto de las Damas en ${minutos}m ${segundos}s.`;
+    if (tamanoTablero !== 8) texto += ` Tablero de ${tamanoTablero}x${tamanoTablero}.`;
     abrirRedSocial(red, url, texto);
 }
 
 function abrirRedSocial(red, url, texto) {
-    const mensajeCompleto = encodeURIComponent(${texto} ${url});
+    const mensajeCompleto = encodeURIComponent(`${texto} ${url}`);
     const urlCodificada = encodeURIComponent(url);
     let shareUrl = "";
 
     switch (red) {
         case 'x':
-            shareUrl = https://twitter.com/intent/tweet?text=${mensajeCompleto};
+            shareUrl = `https://twitter.com/intent/tweet?text=${mensajeCompleto}`;
             break;
         case 'whatsapp':
-            shareUrl = https://wa.me/?text=${mensajeCompleto};
+            shareUrl = `https://wa.me/?text=${mensajeCompleto}`;
             break;
        case 'telegram':
-                    shareUrl = https://t.me/share/url?url=${url}&text=${texto};
+                    shareUrl = `https://t.me/share/url?url=${url}&text=${texto}`;
                     break;
         case 'facebook':
-            shareUrl = https://www.facebook.com/sharer/sharer.php?u=${urlCodificada};
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${urlCodificada}`;
             break;
     }
 
@@ -424,8 +424,5 @@ function abrirRedSocial(red, url, texto) {
 
         crearTablero();
     </script>
-</body>
-</html>
-
 </body>
 </html>
