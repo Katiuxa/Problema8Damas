@@ -182,6 +182,46 @@
             .coord-num, .coord-letra, .coord-esquina { font-size: 14px; }
         }
 
+        .fija {
+    color: green;
+    pointer-events: none;
+}
+    #desafio {
+    background-color: #FF9800; /* Naranja suave */
+    color: #fff;
+    font-weight: bold;
+    font-size: 4.2vw;
+    margin-bottom: 12px;
+    margin-top: -5px;
+    border-radius: 6px;
+    padding: 10px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 768px) {
+    #desafio {
+        font-size: 16px;
+    }
+}
+
+#modoNormal {
+    background-color: #607D8B; /* Gris azulado */
+    color: #fff;
+    font-weight: bold;
+    font-size: 4.2vw;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    padding: 10px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 768px) {
+    #modoNormal {
+        font-size: 16px;
+    }
+}
+
+
              
     </style>
 </head>
@@ -193,23 +233,45 @@
     </div>
 
     <div class="controles">
+       
+
         <label for="tamano">Tamaño del tablero:</label>
         <select id="tamano" onchange="cambiarTamano(this.value)">
             <option value="8" selected>8x8</option>
             <option value="9">9x9</option>
             <option value="10">10x10</option>
             <option value="11">11x11</option>
+            
+
         </select>
-        <div id="contador">Damas en el tablero: 0 / 8</div>
-    </div>
 
-    <div id="tablero-container">
-        <div id="tablero"></div>
-    </div>
+         
+        
 
-    <div id="mensaje"></div>
-    <div id="tiempo">Tiempo: 0m 0s</div>
+        
+        
+        
+        
+
+    </div>
+    <button id="modoNormal" onclick="activarModoNormal()">Modo normal</button>
+    <button id="desafio" onclick="activarDesafio()">Modo desafío</button>
+   <div id="contador">Damas en el tablero: 0 / 8</div>
+
+<div id="tiempo">Tiempo: 0m 0s</div>
+
+<div id="resultado"></div>
+
+<div id="tablero-container">
+
+    <div id="tablero"></div>
+</div>
+
+<div id="mensaje"></div>
+
     <button id="reset" onclick="resetear()">Vaciar tablero</button>
+    
+    
     <div id="resultado"></div>
 
     <div id="compartirFinal" class="social-container" style="display:none;">
@@ -246,6 +308,9 @@
         let juegoEnCurso = false;
         let tamanoTablero = 8;
         let conflictos = [];
+        let modoDesafio = false;
+        let damasFijas = [];
+
 
         function iniciarTemporizador() {
             if (!intervalo) {
@@ -296,11 +361,15 @@
                     casilla.onclick = () => manejarClick(fila, col);
                     const dama = damas.find(d => d.fila === fila && d.col === col);
                     if (dama) {
-                        casilla.textContent = "♕";
-                        if (conflictos.some(c => c.fila === fila && c.col === col)) {
-                            casilla.classList.add("en-conflicto");
-                        }
-                    }
+                      casilla.textContent = "♕";
+                        if (damasFijas.some(d => d.fila === fila && d.col === col)) {
+                    casilla.classList.add("fija");
+                }
+                      if (conflictos.some(c => c.fila === fila && c.col === col)) {
+                    casilla.classList.add("en-conflicto");
+                }
+}
+
                     row.appendChild(casilla);
                 }
                 filaCompleta.appendChild(row);
@@ -322,7 +391,10 @@
 
         function manejarClick(fila, col) {
             if (!juegoEnCurso) iniciarTemporizador();
+            if (damasFijas.some(d => d.fila === fila && d.col === col)) return;
+
             const index = damas.findIndex(d => d.fila === fila && d.col === col);
+
             if (index >= 0) {
                 damas.splice(index, 1);
             } else if (damas.length < tamanoTablero) {
@@ -372,15 +444,24 @@
         }
 
         function resetear() {
-            damas = [];
-            conflictos = [];
-            crearTablero();
-            mensaje.textContent = "";
-            contador.style.backgroundColor = "#eee";
-            contador.textContent = `Damas en el tablero: 0 / ${tamanoTablero}`;
-            resultado.textContent = "";
-            compartirFinal.style.display = "none";
-       }
+    if (modoDesafio) {
+        // Solo borra las damas que no son fijas
+        damas = [...damasFijas];
+    } else {
+        // Borra todo si no estás en modo desafío
+        damas = [];
+        damasFijas = [];
+    }
+
+    conflictos = [];
+    crearTablero();
+    mensaje.textContent = "";
+    contador.style.backgroundColor = "#eee";
+    contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
+    resultado.textContent = "";
+    compartirFinal.style.display = "none";
+}
+
 
         
 
@@ -401,9 +482,18 @@ function compartirResultado(red) {
     const minutos = Math.floor(tiempo / 60);
     const segundos = tiempo % 60;
     let texto = `He resuelto el reto de las Damas en ${minutos}m ${segundos}s.`;
-    if (tamanoTablero !== 8) texto += ` Tablero de ${tamanoTablero}x${tamanoTablero}.`;
+
+    if (tamanoTablero !== 8) {
+        texto += ` Tablero de ${tamanoTablero}x${tamanoTablero}.`;
+    }
+
+    if (modoDesafio) {
+        texto += " ¡En modo desafío!";
+    }
+
     abrirRedSocial(red, url, texto);
 }
+
 
 function abrirRedSocial(red, url, texto) {
     const mensajeCompleto = encodeURIComponent(`${texto} ${url}`);
@@ -427,6 +517,74 @@ function abrirRedSocial(red, url, texto) {
 
     window.open(shareUrl, '_blank');
 }
+
+function activarDesafio() {
+    modoDesafio = true;
+    tiempo = 0;
+    detenerTemporizador();
+    tiempoDiv.textContent = "Tiempo: 0m 0s";
+    resultado.textContent = "";
+    compartirFinal.style.display = "none";
+
+    const solucion = generarSolucionValida(tamanoTablero);
+
+    let numFijas = 3;
+    if (tamanoTablero === 9) numFijas = 4;
+    if (tamanoTablero >= 10) numFijas = 4;
+
+    const seleccionadas = [...solucion].sort(() => 0.5 - Math.random()).slice(0, numFijas);
+    damasFijas = seleccionadas;
+    damas = [...damasFijas];// Se colocan las fijas como punto de partida
+
+    function generarSolucionValida(n) {
+    const soluciones = [];
+    const estado = [];
+
+    function esSeguro(fila, col) {
+        for (let i = 0; i < fila; i++) {
+            const c = estado[i];
+            if (c === col || Math.abs(c - col) === fila - i) return false;
+        }
+        return true;
+    }
+
+    function backtrack(fila) {
+        if (fila === n) {
+            const solucion = estado.map((col, fila) => ({ fila, col }));
+            soluciones.push(solucion);
+            return;
+        }
+        for (let col = 0; col < n; col++) {
+            if (esSeguro(fila, col)) {
+                estado[fila] = col;
+                backtrack(fila + 1);
+            }
+        }
+    }
+
+    backtrack(0);
+    return soluciones[Math.floor(Math.random() * soluciones.length)];
+}
+
+
+    crearTablero();
+    actualizarEstado();
+}
+
+function activarModoNormal() {
+    modoDesafio = false;
+    tiempo = 0;
+    detenerTemporizador();
+    tiempoDiv.textContent = "Tiempo: 0m 0s";
+    resultado.textContent = "";
+    compartirFinal.style.display = "none";
+    damas = [];
+    damasFijas = [];
+    crearTablero();
+    actualizarEstado();
+}
+
+
 
         crearTablero();
     </script>
