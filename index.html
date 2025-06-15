@@ -331,12 +331,26 @@
         }
 
         function cambiarTamano(nuevoTamano) {
-            tamanoTablero = parseInt(nuevoTamano);
-            tiempo = 0;
-            detenerTemporizador();
-            tiempoDiv.textContent = "Tiempo: 0m 0s";
-            resetear();
-        }
+    tamanoTablero = parseInt(nuevoTamano);
+    tiempo = 0;
+    detenerTemporizador();
+    tiempoDiv.textContent = "Tiempo: 0m 0s";
+    resultado.textContent = "";
+    compartirFinal.style.display = "none";
+
+    if (modoDesafio) {
+        // Si estamos en modo problema, vacía también damas fijas
+        damas = [];
+        damasFijas = [];
+    } else {
+        damas = [];
+    }
+
+    conflictos = [];
+    crearTablero();
+    actualizarEstado();
+}
+
 
         function crearTablero() {
             tablero.innerHTML = "";
