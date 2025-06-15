@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de las 8 Damas</title>
+
+    <script>
+      if (!window.location.search.includes("v=6")) {
+    const nuevaUrl = window.location.pathname + "?v=6";
+    window.location.replace(nuevaUrl);
+  }
+</script>
     <style>
         body {
             background-color: #f0f0f0;
