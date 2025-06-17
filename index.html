@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=20")) {
-    const nuevaUrl = window.location.pathname + "?v=20";
+      if (!window.location.search.includes("v=21")) {
+    const nuevaUrl = window.location.pathname + "?v=21";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -651,6 +651,7 @@ function activarDesafio() {
     tiempo = 0;
     detenerTemporizador();
     actualizarCronometro(0);
+    document.getElementById("cronometro").style.backgroundColor = "#e0e0e0";
 
     resultado.textContent = "";
     compartirFinal.style.display = "none";
@@ -680,6 +681,7 @@ function activarModoNormal() {
     tiempo = 0;
     detenerTemporizador();
     actualizarCronometro(0);
+    document.getElementById("cronometro").style.backgroundColor = "#e0e0e0";
 
     document.getElementById("tablerosResueltos").style.display = "none";
     resultado.textContent = "";
