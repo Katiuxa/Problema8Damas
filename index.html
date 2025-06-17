@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=35")) {
-    const nuevaUrl = window.location.pathname + "?v=35";
+      if (!window.location.search.includes("v=36")) {
+    const nuevaUrl = window.location.pathname + "?v=36";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -394,6 +394,7 @@ h1 {
         const contador = document.getElementById("contador");
         const minutosSpan = document.getElementById("minutos");
         const segundosSpan = document.getElementById("segundos");
+        const sonidoFicha = new Audio("ficha.mp3");
 
         const resultado = document.getElementById("resultado");
         const compartirFinal = document.getElementById("compartirFinal");
@@ -509,25 +510,24 @@ h1 {
         }
 
     function manejarClick(fila, col) {
-    // ⛔️ Bloquear interacción si el tablero está bloqueado
     if (tableroBloqueado) return;
-
-    // ⛔️ No permitir quitar una dama fija
     if (damasFijas.some(d => d.fila === fila && d.col === col)) return;
 
     const index = damas.findIndex(d => d.fila === fila && d.col === col);
 
     if (index >= 0) {
         damas.splice(index, 1);
+        sonidoFicha.play(); // 🔈 sonido al quitar
     } else if (damas.length < tamanoTablero) {
         damas.push({ fila, col });
+        sonidoFicha.play(); // 🔈 sonido al poner
 
-        // ✅ Iniciar cronómetro en modo normal o problema
+        // Iniciar cronómetro en modo normal o problema
         if (!modoContrarreloj && !juegoEnCurso) {
             iniciarTemporizador();
         }
 
-        // ✅ Iniciar cuenta atrás en modo contrarreloj al colocar la primera dama del jugador
+        // Iniciar cuenta atrás en modo contrarreloj al colocar la primera dama del jugador
         if (modoContrarreloj && !cuentaAtrasIniciada && !esDamaFija(fila, col)) {
             cuentaAtrasIniciada = true;
             iniciarCuentaAtras();
@@ -536,6 +536,7 @@ h1 {
 
     actualizarEstado();
 }
+
 
 
 function esDamaFija(fila, col) {
