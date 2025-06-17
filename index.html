@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=22")) {
-    const nuevaUrl = window.location.pathname + "?v=22";
+      if (!window.location.search.includes("v=23")) {
+    const nuevaUrl = window.location.pathname + "?v=23";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -692,6 +692,8 @@ function activarModoNormal() {
     
     crearTablero();
     contador.textContent = `Damas en el tablero: 0 / ${tamanoTablero}`;
+    contador.style.backgroundColor = "#eee";
+
 
 }
 
