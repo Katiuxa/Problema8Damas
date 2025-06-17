@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=8")) {
-    const nuevaUrl = window.location.pathname + "?v=8";
+      if (!window.location.search.includes("v=9")) {
+    const nuevaUrl = window.location.pathname + "?v=9";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -702,7 +702,7 @@ function iniciarModoContrarreloj(segundos) {
 
 function siguienteTableroContrarreloj() {
     const solucion = generarSolucionValida(tamanoTablero);
-    let numFijas = 2;
+    let numFijas = 3;
     if (tamanoTablero === 9) numFijas = 3;
     if (tamanoTablero >= 10) numFijas = 4;
 
@@ -773,6 +773,26 @@ function actualizarCronometro(t) {
 
         crearTablero();
     </script>
+
+        </script>
+
+    <footer id="footer">
+      Designed with ❤️ by @Metamovidas
+    </footer>
+
+    <style>
+      #footer {
+        margin-top: 30px;
+        padding: 10px;
+        text-align: center;
+        font-size: 0.9em;
+        color: #666;
+        background-color: transparent;
+      }
+    </style>
+</body>
+</html>
+
 </body>
 
     
