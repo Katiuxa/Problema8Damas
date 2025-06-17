@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=28")) {
-    const nuevaUrl = window.location.pathname + "?v=28";
+      if (!window.location.search.includes("v=30")) {
+    const nuevaUrl = window.location.pathname + "?v=30";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -283,7 +283,24 @@ h1 {
     </style>
 </head>
 <body>
-<h1 onclick="location.reload()">8 Damas</h1>
+<div id="logo" onclick="location.reload()" style="cursor: pointer;">
+  8 DAMAS
+</div>
+
+<style>
+  #logo {
+    background-color: #5a7d89; /* color tipo "Modo normal" */
+    color: white;
+    font-size: 6vw;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 12px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    margin: 20px auto;
+    text-align: center;
+    width: fit-content;
+  }
+</style>
 
 
     <div id="instrucciones">
