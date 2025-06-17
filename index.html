@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=32")) {
-    const nuevaUrl = window.location.pathname + "?v=32";
+      if (!window.location.search.includes("v=15")) {
+    const nuevaUrl = window.location.pathname + "?v=15";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -1147,25 +1147,18 @@ function actualizarCronometro(t) {
 }
 
 function mostrarBotonReinicioContrarreloj() {
-    let btn = document.createElement("button");
-    btn.id = "reiniciarContrarreloj";
-    btn.textContent = "Reiniciar contrarreloj";
-    btn.style.marginTop = "10px";
-    btn.style.backgroundColor = "#9C27B0";
-    btn.style.color = "#fff";
-    btn.style.fontWeight = "bold";
-    btn.style.borderRadius = "8px";
-    btn.style.padding = "10px 16px";
-    btn.onclick = () => {
-        tableroBloqueado = false;
-        iniciarModoContrarreloj(tiempoOriginalContrarreloj);
-        document.getElementById("mensaje").textContent = "";
-        btn.remove();
-    };
-
-    // Aquí se inserta debajo del contador
-    document.getElementById("contador").insertAdjacentElement("afterend", btn);
+    const btn = document.getElementById("reiniciarContrarreloj");
+    if (btn) {
+        btn.style.display = "inline-block";
+        btn.onclick = () => {
+            tableroBloqueado = false;
+            iniciarModoContrarreloj(tiempoOriginalContrarreloj);
+            document.getElementById("mensaje").textContent = "";
+            btn.style.display = "none";
+        };
+    }
 }
+
 
 
 
