@@ -363,6 +363,8 @@
 
         const resultado = document.getElementById("resultado");
         const compartirFinal = document.getElementById("compartirFinal");
+        let modoContrarrelojActivo = false;
+
 
         let damas = [];
         let tiempo = 0;
@@ -528,12 +530,10 @@ function esDamaFija(fila, col) {
             mensaje.textContent = "";
             contador.style.backgroundColor = "#ccffcc";
 
-            if (modoContrarreloj) {
+            if (modoContrarreloj && modoContrarrelojActivo) {
                 tablerosResueltos++;
                 document.getElementById("tablerosResueltos").textContent = `Tableros resueltos: ${tablerosResueltos}`;
                 siguienteTableroContrarreloj();
-            
-
             } else {
                 detenerTemporizador();
                 const minutos = Math.floor(tiempo / 60);
@@ -551,6 +551,7 @@ function esDamaFija(fila, col) {
 
     crearTablero();
 }
+
 
 
         function resetear() {
@@ -706,6 +707,8 @@ function mostrarSelectorTiempo() {
 
 function iniciarModoContrarreloj(segundos) {
     modoContrarreloj = true;
+    modoContrarrelojActivo = true;
+
     modoDesafio = true;
     tablerosResueltos = 0;
     tiempoRestante = parseInt(segundos);
@@ -747,13 +750,20 @@ function iniciarCuentaAtras() {
             clearInterval(intervalo);
             intervalo = null;
             actualizarCronometro(0);
+
+            // Mostrar mensaje final
             document.getElementById("cronometro").style.backgroundColor = "#ffcccc";
             document.getElementById("mensaje").textContent = `⏱ ¡Tiempo agotado! Has completado ${tablerosResueltos} tablero(s).`;
+
+            // Finalizar modo contrarreloj
             modoContrarreloj = false;
+            modoContrarrelojActivo = false; // 🔥 DESACTIVAMOS por completo el modo
+
             juegoEnCurso = false;
         }
     }, 1000);
 }
+
 
 
 
