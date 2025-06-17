@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=21")) {
-    const nuevaUrl = window.location.pathname + "?v=21";
+      if (!window.location.search.includes("v=22")) {
+    const nuevaUrl = window.location.pathname + "?v=22";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -691,6 +691,8 @@ function activarModoNormal() {
     damasFijas = [];
     
     crearTablero();
+    contador.textContent = `Damas en el tablero: 0 / ${tamanoTablero}`;
+
 }
 
 function mostrarSelectorTiempo() {
