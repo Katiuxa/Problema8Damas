@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=39")) {
-    const nuevaUrl = window.location.pathname + "?v=39";
+      if (!window.location.search.includes("v=10")) {
+    const nuevaUrl = window.location.pathname + "?v=10";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -395,6 +395,15 @@ h1 {
         const minutosSpan = document.getElementById("minutos");
         const segundosSpan = document.getElementById("segundos");
         const sonidoFicha = new Audio("ficha.mp3");
+        sonidoFicha.preload = "auto";
+        sonidoFicha.load();
+        
+        // función para clonar y evitar delay en móvil
+        function reproducirSonidoFicha() {
+            const clon = sonidoFicha.cloneNode();
+            clon.play();
+        }
+        
 
         const resultado = document.getElementById("resultado");
         const compartirFinal = document.getElementById("compartirFinal");
@@ -517,10 +526,12 @@ h1 {
 
     if (index >= 0) {
         damas.splice(index, 1);
-        sonidoFicha.play(); // 🔈 sonido al quitar
+       reproducirSonidoFicha();
+
     } else if (damas.length < tamanoTablero) {
         damas.push({ fila, col });
-        sonidoFicha.play(); // 🔈 sonido al poner
+       reproducirSonidoFicha();
+
 
         // Iniciar cronómetro en modo normal o problema
         if (!modoContrarreloj && !juegoEnCurso) {
