@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=15")) {
-    const nuevaUrl = window.location.pathname + "?v=15";
+      if (!window.location.search.includes("v=16")) {
+    const nuevaUrl = window.location.pathname + "?v=16";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -1057,6 +1057,8 @@ function reiniciarContrarreloj() {
     tableroBloqueado = false;
     iniciarModoContrarreloj(tiempoOriginalContrarreloj);
     document.getElementById("mensaje").textContent = "";
+    document.getElementById("reiniciarContrarreloj").style.display = "inline-block";
+
 }
 
 
@@ -1150,14 +1152,10 @@ function mostrarBotonReinicioContrarreloj() {
     const btn = document.getElementById("reiniciarContrarreloj");
     if (btn) {
         btn.style.display = "inline-block";
-        btn.onclick = () => {
-            tableroBloqueado = false;
-            iniciarModoContrarreloj(tiempoOriginalContrarreloj);
-            document.getElementById("mensaje").textContent = "";
-            btn.style.display = "none";
-        };
+        btn.onclick = reiniciarContrarreloj; // ← Llama directamente a la función
     }
 }
+
 
 
 
