@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=11")) {
-    const nuevaUrl = window.location.pathname + "?v=11";
+      if (!window.location.search.includes("v=50")) {
+    const nuevaUrl = window.location.pathname + "?v=50";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -41,6 +41,9 @@
             text-align: justify;
             box-shadow: 0 0 8px rgba(0,0,0,0.1);
         }
+       
+
+        
 
         .controles {
             display: flex;
@@ -276,6 +279,41 @@ h1 {
   }
 }
 
+#selector-idioma {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+#selector-idioma button {
+    font-size: 3.8vw;
+    padding: 6px 12px;
+    background-color: #ffffff;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 90px;
+    text-align: center;
+}
+
+#selector-idioma button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 768px) {
+    #selector-idioma button {
+        font-size: 16px;
+        padding: 6px 14px;
+    }
+}
+
+
+
 
 
 
@@ -308,6 +346,17 @@ h1 {
         El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.
         
     </div>
+
+    <div id="selector-idioma">
+  <button onclick="cambiarIdioma('es')">Español</button>
+  <button onclick="cambiarIdioma('en')">English</button>
+  <button onclick="cambiarIdioma('fr')">Français</button>
+  <button onclick="cambiarIdioma('de')">Deutsch</button>
+</div>
+
+
+
+
 
     <div class="controles">
        
@@ -389,6 +438,179 @@ h1 {
     </div>
 
     <script>
+        let idiomaActual = 'es';
+
+        function cambiarIdioma(lang) {
+  const t = traducciones[lang];
+  if (!t) return;
+
+  idiomaActual = lang;
+
+  // Título y descripción
+  const logo = document.getElementById("logo");
+  if (logo) logo.textContent = t.titulo;
+
+  const instrucciones = document.getElementById("instrucciones");
+  if (instrucciones) instrucciones.textContent = t.instrucciones;
+
+  // Etiquetas y botones
+  const labelTamano = document.querySelector("label[for='tamano']");
+  if (labelTamano) labelTamano.textContent = t.tamanoTablero;
+
+  const modoNormal = document.getElementById("modoNormal");
+  if (modoNormal) modoNormal.textContent = t.modoNormal;
+
+  const desafio = document.getElementById("desafio");
+  if (desafio) desafio.textContent = t.modoProblema;
+
+  const modoContrarreloj = document.getElementById("modoContrarreloj");
+  if (modoContrarreloj) modoContrarreloj.textContent = t.modoContrarreloj;
+        
+  const reset = document.getElementById("reset");
+    if (reset) reset.textContent = t.vaciar;
+
+  // Selector de tiempo
+  const selector = document.getElementById("selectorTiempo");
+  if (selector) {
+    selector.options[0].text = t.seleccionaDuracion;
+    selector.options[1].text = t.unMinuto;
+    selector.options[2].text = t.tresMinutos;
+    selector.options[3].text = t.cincoMinutos;
+  }
+
+  // Textos de compartir
+  document.querySelectorAll(".social-container > div strong").forEach((el, i) => {
+  el.textContent = i === 0 && compartirFinal ? t.compartirFinal : t.compartir;
+});
+
+  if (compartirFinal) compartirFinal.textContent = t.compartirFinal;
+
+  const compartir = document.querySelector(".social-container div strong");
+  if (compartir) compartir.textContent = t.compartir;
+
+  // Actualizar mensajes visibles si existen
+  if (document.getElementById("mensaje").textContent.includes("conflicto") || document.getElementById("mensaje").textContent.includes("conflict")) {
+    document.getElementById("mensaje").textContent = t.conflictos;
+  }
+
+  if (document.getElementById("mensaje").textContent.includes("Tiempo agotado") || document.getElementById("mensaje").textContent.includes("Time's up")) {
+    const num = tablerosResueltos || 0;
+    document.getElementById("mensaje").textContent = `${t.tiempoAgotado} ${num} ${t.tablero}`;
+  }
+
+  // Resultado si se ha resuelto un tablero
+  const resultado = document.getElementById("resultado");
+  if (resultado && resultado.textContent.includes("resuelto") || resultado.textContent.includes("solved")) {
+    const minutos = Math.floor(tiempo / 60);
+    const segundos = tiempo % 60;
+    resultado.innerHTML = `${t.compartirResultado} ${minutos}m ${segundos}s.✨`;
+  }
+
+  // Contador
+  const contador = document.getElementById("contador");
+  if (contador) {
+    contador.textContent = `${t.damasTablero}${damas.length} / ${tamanoTablero}`;
+  }
+
+  // Botón de reiniciar contrarreloj, si existe
+  const botonReiniciar = document.getElementById("reiniciarContrarreloj");
+  if (botonReiniciar) {
+    botonReiniciar.textContent = t.reiniciar;
+  }
+}
+
+
+const traducciones = {
+  es: {
+    titulo: "8 DAMAS",
+    instrucciones: "El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.",
+    tamanoTablero: "Tamaño del tablero:",
+    modoNormal: "Modo normal",
+    modoProblema: "Modo problema",
+    modoContrarreloj: "Modo contrarreloj",
+    seleccionaDuracion: "Selecciona duración",
+    unMinuto: "1 minuto",
+    tresMinutos: "3 minutos",
+    cincoMinutos: "5 minutos",
+    damasTablero: "Damas en el tablero: ",
+    conflictos: "Hay conflictos entre las damas.",
+    tiempoAgotado: "⏱ ¡Tiempo agotado! Has completado",
+    tablero: "tablero(s).",
+    reiniciar: "Reiniciar contrarreloj",
+    compartirResultado: "✨ Has resuelto el tablero en",
+    compartir: "Compartir en:",
+    compartirFinal: "Compartir tu resultado en:",
+    vaciar: "Vaciar tablero", // español
+
+  },
+  en: {
+    titulo: "8 QUEENS",
+    instrucciones: "The 8 queens problem is a classic chess and logic challenge: place 8 queens on a standard 8x8 chessboard so that none of them attack each other. That means no two queens can share the same row, column, or diagonal.",
+    tamanoTablero: "Board size:",
+    modoNormal: "Normal mode",
+    modoProblema: "Challenge mode",
+    modoContrarreloj: "Timed mode",
+    seleccionaDuracion: "Select duration",
+    unMinuto: "1 minute",
+    tresMinutos: "3 minutes",
+    cincoMinutos: "5 minutes",
+    damasTablero: "Queens on the board: ",
+    conflictos: "There are conflicts between the queens.",
+    tiempoAgotado: "⏱ Time's up! You've completed",
+    tablero: "board(s).",
+    reiniciar: "Restart timed mode",
+    compartirResultado: "✨ You've solved the board in",
+    compartir: "Share on:",
+    compartirFinal: "Share your result on:",
+    vaciar: "Clear board", // inglés
+
+  },
+  fr: {
+    titulo: "8 REINES",
+    instrucciones: "Le problème des 8 reines est un classique des échecs et de la logique : il s'agit de placer 8 reines sur un échiquier 8x8 de manière à ce qu'aucune ne puisse en attaquer une autre. Autrement dit, elles ne doivent pas être sur la même ligne, colonne ou diagonale.",
+    tamanoTablero: "Taille de l'échiquier :",
+    modoNormal: "Mode normal",
+    modoProblema: "Mode défi",
+    modoContrarreloj: "Mode chronométré",
+    seleccionaDuracion: "Choisir la durée",
+    unMinuto: "1 minute",
+    tresMinutos: "3 minutes",
+    cincoMinutos: "5 minutes",
+    damasTablero: "Reines sur l'échiquier : ",
+    conflictos: "Il y a des conflits entre les reines.",
+    tiempoAgotado: "⏱ Temps écoulé ! Vous avez complété",
+    tablero: "échiquier(s).",
+    reiniciar: "Redémarrer le mode chronométré",
+    compartirResultado: "✨ Vous avez résolu l’échiquier en",
+    compartir: "Partager sur :",
+    compartirFinal: "Partager votre résultat sur :",
+    vaciar: "Vider l’échiquier", // francés
+
+  },
+  de: {
+    titulo: "8 DAMEN",
+    instrucciones: "Das 8-Damen-Problem ist ein klassisches Schach- und Logikrätsel: Es geht darum, 8 Damen auf einem 8x8-Schachbrett so zu platzieren, dass sie sich gegenseitig nicht angreifen. Keine zwei Damen dürfen sich in der gleichen Reihe, Spalte oder Diagonale befinden.",
+    tamanoTablero: "Brettgröße:",
+    modoNormal: "Normaler Modus",
+    modoProblema: "Problem-Modus",
+    modoContrarreloj: "Zeitmodus",
+    seleccionaDuracion: "Dauer wählen",
+    unMinuto: "1 Minute",
+    tresMinutos: "3 Minuten",
+    cincoMinutos: "5 Minuten",
+    damasTablero: "Damen auf dem Brett: ",
+    conflictos: "Es gibt Konflikte zwischen den Damen.",
+    tiempoAgotado: "⏱ Zeit abgelaufen! Du hast",
+    tablero: "Brett(e) gelöst.",
+    reiniciar: "Zeitmodus neu starten",
+    compartirResultado: "✨ Du hast das Brett gelöst in",
+    compartir: "Teilen auf:",
+    compartirFinal: "Teile dein Ergebnis auf:",
+    vaciar: "Brett leeren", // alemán
+
+  }
+};
+
         const tablero = document.getElementById("tablero");
         const mensaje = document.getElementById("mensaje");
         const contador = document.getElementById("contador");
