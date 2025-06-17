@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=15")) {
-    const nuevaUrl = window.location.pathname + "?v=15";
+      if (!window.location.search.includes("v=16")) {
+    const nuevaUrl = window.location.pathname + "?v=16";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -272,10 +272,8 @@
     </style>
 </head>
 <body>
-<div onclick="location.reload()" style="cursor:pointer; display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-  <img src="logo.png" alt="Logo 8 Damas" style="height: 40px;">
-  <h1 style="margin: 0;">8 Damas</h1>
-</div>
+<h1 onclick="location.reload()" style="cursor:pointer;">8 Damas</h1>
+
 
     <div id="instrucciones">
         El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.
