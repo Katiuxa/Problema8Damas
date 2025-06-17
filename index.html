@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=30")) {
-    const nuevaUrl = window.location.pathname + "?v=30";
+      if (!window.location.search.includes("v=31")) {
+    const nuevaUrl = window.location.pathname + "?v=31";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -264,11 +264,16 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     margin: 10px 0;
 }
+
+  
+
 @media (min-width: 768px) {
     #cronometro {
         font-size: 32px;
     }
 }
+
+
 
 @media (min-width: 768px) {
     #reset {
@@ -322,7 +327,7 @@ h1 {
     }
 }
 
-
+  
 
 
 
@@ -413,6 +418,12 @@ h1 {
 <div id="tablerosResueltos" style="display: none; font-size: clamp(20px, 5vw, 36px); font-weight: bold; margin: 8px;"></div>
 
 <div id="contador"></div>
+
+<div id="contador"></div>
+<button id="reiniciarContrarreloj" onclick="reiniciarContrarreloj()" style="display: none; background-color: #9C27B0; color: white; font-weight: bold; border-radius: 8px; padding: 10px 16px; margin-top: 10px;">
+  Reiniciar contrarreloj
+</button>
+
 
 
 <div id="resultado"></div>
@@ -950,6 +961,8 @@ function activarDesafio() {
     modoContrarreloj = false;
     modoContrarrelojActivo = false;
     cuentaAtrasIniciada = false;
+    document.getElementById("reiniciarContrarreloj").style.display = "none";
+
 
     tiempo = 0;
     detenerTemporizador();
@@ -977,6 +990,8 @@ function activarDesafio() {
 
 function activarModoNormal() {
     modoDesafio = false;
+    document.getElementById("reiniciarContrarreloj").style.display = "none";
+
     modoContrarreloj = false;
     modoContrarrelojActivo = false;
     cuentaAtrasIniciada = false;
@@ -1030,12 +1045,20 @@ function iniciarModoContrarreloj(segundos) {
     document.getElementById("selectorTiempo").style.display = "none";
     document.getElementById("tablerosResueltos").style.display = "block";
     document.getElementById("tablerosResueltos").textContent = "Tableros resueltos: 0";
+    document.getElementById("reiniciarContrarreloj").style.display = "inline-block";
 
     siguienteTableroContrarreloj(); 
     
     cambiarIdioma(idiomaActual);
 // 👈 pero NO iniciar cuenta atrás hasta la primera dama
 }
+
+function reiniciarContrarreloj() {
+    tableroBloqueado = false;
+    iniciarModoContrarreloj(tiempoOriginalContrarreloj);
+    document.getElementById("mensaje").textContent = "";
+}
+
 
 
 
