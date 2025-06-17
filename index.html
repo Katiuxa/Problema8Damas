@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=9")) {
-    const nuevaUrl = window.location.pathname + "?v=9";
+      if (!window.location.search.includes("v=3")) {
+    const nuevaUrl = window.location.pathname + "?v=3";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -375,6 +375,8 @@
         let modoContrarreloj = false;
         let tiempoRestante = 0;
         let tablerosResueltos = 0;
+        let cuentaAtrasIniciada = false;
+
 
 
 
@@ -469,18 +471,28 @@
         }
 
         function manejarClick(fila, col) {
-            if (!juegoEnCurso) iniciarTemporizador();
-            if (damasFijas.some(d => d.fila === fila && d.col === col)) return;
+    if (damasFijas.some(d => d.fila === fila && d.col === col)) return;
 
-            const index = damas.findIndex(d => d.fila === fila && d.col === col);
+    const index = damas.findIndex(d => d.fila === fila && d.col === col);
 
-            if (index >= 0) {
-                damas.splice(index, 1);
-            } else if (damas.length < tamanoTablero) {
-                damas.push({ fila, col });
-            }
-            actualizarEstado();
+    if (index >= 0) {
+        damas.splice(index, 1);
+    } else if (damas.length < tamanoTablero) {
+        damas.push({ fila, col });
+
+        // ⏱ Iniciar cuenta atrás al colocar la primera dama si es modo contrarreloj
+        if (modoContrarreloj && !cuentaAtrasIniciada && !esDamaFija(fila, col)) {
+            cuentaAtrasIniciada = true;
+            iniciarCuentaAtras();
         }
+    }
+
+    actualizarEstado();
+}
+
+function esDamaFija(fila, col) {
+    return damasFijas.some(d => d.fila === fila && d.col === col);
+}
 
         function detectarConflictos() {
             const conflictivas = [];
@@ -691,16 +703,21 @@ function iniciarModoContrarreloj(segundos) {
     modoDesafio = true;
     tablerosResueltos = 0;
     tiempoRestante = parseInt(segundos);
-    document.getElementById("selectorTiempo").style.display = "none";
 
+    actualizarCronometro(tiempoRestante); // 👈 Mostrar el tiempo ya
+
+    document.getElementById("selectorTiempo").style.display = "none";
     document.getElementById("tablerosResueltos").style.display = "block";
     document.getElementById("tablerosResueltos").textContent = "Tableros resueltos: 0";
 
     siguienteTableroContrarreloj();
-    iniciarCuentaAtras();
+    // La cuenta atrás comienza al colocar la primera dama
 }
 
+
+
 function siguienteTableroContrarreloj() {
+    cuentaAtrasIniciada = false; // importante para el siguiente tablero
     const solucion = generarSolucionValida(tamanoTablero);
     let numFijas = 3;
     if (tamanoTablero === 9) numFijas = 3;
@@ -711,6 +728,7 @@ function siguienteTableroContrarreloj() {
     crearTablero();
     actualizarEstado();
 }
+
 function iniciarCuentaAtras() {
     detenerTemporizador(); // Evita superposiciones
     actualizarCronometro(tiempoRestante); // Muestra el tiempo inicial
