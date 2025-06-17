@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=50")) {
-    const nuevaUrl = window.location.pathname + "?v=50";
+      if (!window.location.search.includes("v=51")) {
+    const nuevaUrl = window.location.pathname + "?v=51";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -396,9 +396,10 @@ h1 {
 
 <div id="cronometro"><span id="minutos">00</span>:<span id="segundos">00</span></div>
 
-<div id="tablerosResueltos" style="display: none; font-size: clamp(20px, 5vw, 36px); font-weight: bold; margin: 8px;">Tableros resueltos: 0</div>
+<div id="tablerosResueltos" style="display: none; font-size: clamp(20px, 5vw, 36px); font-weight: bold; margin: 8px;"></div>
 
-<div id="contador">Damas en el tablero: 0 / 8</div>
+<div id="contador"></div>
+
 
 <div id="resultado"></div>
 
@@ -445,6 +446,8 @@ h1 {
   if (!t) return;
 
   idiomaActual = lang;
+    document.title = t.titulo;
+
 
   // Título y descripción
   const logo = document.getElementById("logo");
@@ -512,6 +515,12 @@ h1 {
     contador.textContent = `${t.damasTablero}${damas.length} / ${tamanoTablero}`;
   }
 
+    const tablerosResueltosDiv = document.getElementById("tablerosResueltos");
+  if (tablerosResueltosDiv) {
+    tablerosResueltosDiv.textContent = `${t.tablerosResueltos} ${tablerosResueltos}`;
+  }
+
+
   // Botón de reiniciar contrarreloj, si existe
   const botonReiniciar = document.getElementById("reiniciarContrarreloj");
   if (botonReiniciar) {
@@ -540,7 +549,9 @@ const traducciones = {
     compartirResultado: "✨ Has resuelto el tablero en",
     compartir: "Compartir en:",
     compartirFinal: "Compartir tu resultado en:",
-    vaciar: "Vaciar tablero", // español
+    vaciar: "Vaciar tablero",
+    tablerosResueltos: "Tableros resueltos:",
+    titulo: "8 DAMAS",
 
   },
   en: {
@@ -562,7 +573,10 @@ const traducciones = {
     compartirResultado: "✨ You've solved the board in",
     compartir: "Share on:",
     compartirFinal: "Share your result on:",
-    vaciar: "Clear board", // inglés
+    vaciar: "Clear board",
+    tablerosResueltos: "Boards solved:",
+    titulo: "8 QUEENS",
+
 
   },
   fr: {
@@ -584,7 +598,10 @@ const traducciones = {
     compartirResultado: "✨ Vous avez résolu l’échiquier en",
     compartir: "Partager sur :",
     compartirFinal: "Partager votre résultat sur :",
-    vaciar: "Vider l’échiquier", // francés
+    vaciar: "Vider l’échiquier",
+    tablerosResueltos: "Échiquiers résolus :",
+    titulo: "8 REINES",
+
 
   },
   de: {
@@ -606,7 +623,10 @@ const traducciones = {
     compartirResultado: "✨ Du hast das Brett gelöst in",
     compartir: "Teilen auf:",
     compartirFinal: "Teile dein Ergebnis auf:",
-    vaciar: "Brett leeren", // alemán
+    vaciar: "Brett leeren",
+    
+    tablerosResueltos: "Gelöste Bretter:",
+    titulo: "8 DAMEN",
 
   }
 };
@@ -792,7 +812,8 @@ function esDamaFija(fila, col) {
 
         function actualizarEstado() {
     conflictos = [];
-    contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
+    contador.textContent = `${traducciones[idiomaActual].damasTablero}${damas.length} / ${tamanoTablero}`;
+
     
     if (damas.length === tamanoTablero) {
         conflictos = detectarConflictos();
@@ -806,7 +827,8 @@ function esDamaFija(fila, col) {
 
             if (modoContrarreloj && modoContrarrelojActivo) {
                 tablerosResueltos++;
-                document.getElementById("tablerosResueltos").textContent = `Tableros resueltos: ${tablerosResueltos}`;
+                document.getElementById("tablerosResueltos").textContent = `${traducciones[idiomaActual].tablerosResueltos} ${tablerosResueltos}`;
+
                 siguienteTableroContrarreloj();
             } else {
                 detenerTemporizador();
@@ -842,7 +864,8 @@ function esDamaFija(fila, col) {
     crearTablero();
     mensaje.textContent = "";
     contador.style.backgroundColor = "#eee";
-    contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
+    contador.textContent = `${traducciones[idiomaActual].damasTablero}${damas.length} / ${tamanoTablero}`;
+
     resultado.textContent = "";
     compartirFinal.style.display = "none";
 }
@@ -989,7 +1012,10 @@ function iniciarModoContrarreloj(segundos) {
     document.getElementById("tablerosResueltos").style.display = "block";
     document.getElementById("tablerosResueltos").textContent = "Tableros resueltos: 0";
 
-    siguienteTableroContrarreloj(); // 👈 pero NO iniciar cuenta atrás hasta la primera dama
+    siguienteTableroContrarreloj(); 
+    
+    cambiarIdioma(idiomaActual);
+// 👈 pero NO iniciar cuenta atrás hasta la primera dama
 }
 
 
