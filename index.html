@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=51")) {
-    const nuevaUrl = window.location.pathname + "?v=51";
+      if (!window.location.search.includes("v=55")) {
+    const nuevaUrl = window.location.pathname + "?v=55";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -186,7 +186,7 @@
 
         @media (min-width: 768px) {
             h1 { font-size: 28px; }
-            #instrucciones { font-size: 15px; }
+            #instrucciones { font-size: 18px; }
             #contador, #tiempo, #mensaje, #resultado { font-size: 18px; }
             .casilla { width: 60px; height: 60px; font-size: 56px; }
             button, select { font-size: 15px; }
@@ -641,10 +641,13 @@ const traducciones = {
         sonidoFicha.load();
         
         // función para clonar y evitar delay en móvil
-        function reproducirSonidoFicha() {
-            const clon = sonidoFicha.cloneNode();
-            clon.play();
-        }
+       function reproducirSonidoFicha() {
+    if (window.innerWidth >= 768) {
+        const clon = sonidoFicha.cloneNode();
+        clon.play();
+    }
+}
+
         
 
         const resultado = document.getElementById("resultado");
