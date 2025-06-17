@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=25")) {
-    const nuevaUrl = window.location.pathname + "?v=25";
+      if (!window.location.search.includes("v=26")) {
+    const nuevaUrl = window.location.pathname + "?v=26";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -702,24 +702,34 @@ function mostrarSelectorTiempo() {
 }
 
 function iniciarModoContrarreloj(segundos) {
+    if (!segundos) return;
+
+    // 🔴 DETENER cuenta atrás anterior si la hay
+    if (intervalo) {
+        clearInterval(intervalo);
+        intervalo = null;
+    }
+
     modoContrarreloj = true;
     modoContrarrelojActivo = true;
-
     modoDesafio = true;
-    tablerosResueltos = 0;
-    tiempoRestante = parseInt(segundos);
     cuentaAtrasIniciada = false;
+    juegoEnCurso = false;
 
+    tiempo = 0;
+    tiempoRestante = parseInt(segundos);
+    tablerosResueltos = 0;
 
-    actualizarCronometro(tiempoRestante); // 👈 Mostrar el tiempo ya
+    actualizarCronometro(tiempoRestante); // 👈 Mostrar tiempo inicial ya
+    document.getElementById("cronometro").style.backgroundColor = "#e0e0e0";
 
     document.getElementById("selectorTiempo").style.display = "none";
     document.getElementById("tablerosResueltos").style.display = "block";
     document.getElementById("tablerosResueltos").textContent = "Tableros resueltos: 0";
 
-    siguienteTableroContrarreloj();
-    // La cuenta atrás comienza al colocar la primera dama
+    siguienteTableroContrarreloj(); // 👈 pero NO iniciar cuenta atrás hasta la primera dama
 }
+
 
 
 
