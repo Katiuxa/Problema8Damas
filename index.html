@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=32")) {
-    const nuevaUrl = window.location.pathname + "?v=32";
+      if (!window.location.search.includes("v=33")) {
+    const nuevaUrl = window.location.pathname + "?v=33";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -352,12 +352,13 @@ h1 {
 <div id="contador">Damas en el tablero: 0 / 8</div>
 
 <div id="resultado"></div>
+<div id="mensaje"></div>
 
 <div id="tablero-container">
 
     <div id="tablero"></div>
 </div>
-<div id="mensaje"></div>
+
 
 
     <button id="reset" onclick="resetear()">Vaciar tablero</button>
