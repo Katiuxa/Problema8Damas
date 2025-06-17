@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=34")) {
-    const nuevaUrl = window.location.pathname + "?v=34";
+      if (!window.location.search.includes("v=35")) {
+    const nuevaUrl = window.location.pathname + "?v=35";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -412,6 +412,8 @@ h1 {
         let tiempoRestante = 0;
         let tablerosResueltos = 0;
         let cuentaAtrasIniciada = false;
+        let tableroBloqueado = false;
+        let tiempoOriginalContrarreloj = 0; // Para recordar cuánto tiempo había
 
 
 
@@ -506,7 +508,11 @@ h1 {
             tablero.appendChild(letrasDiv);
         }
 
-       function manejarClick(fila, col) {
+    function manejarClick(fila, col) {
+    // ⛔️ Bloquear interacción si el tablero está bloqueado
+    if (tableroBloqueado) return;
+
+    // ⛔️ No permitir quitar una dama fija
     if (damasFijas.some(d => d.fila === fila && d.col === col)) return;
 
     const index = damas.findIndex(d => d.fila === fila && d.col === col);
@@ -724,8 +730,9 @@ function mostrarSelectorTiempo() {
 
 function iniciarModoContrarreloj(segundos) {
     if (!segundos) return;
+    tiempoOriginalContrarreloj = parseInt(segundos);
 
-    // 🔴 DETENER cuenta atrás anterior si la hay
+        // 🔴 DETENER cuenta atrás anterior si la hay
     if (intervalo) {
         clearInterval(intervalo);
         intervalo = null;
@@ -789,6 +796,12 @@ function iniciarCuentaAtras() {
             modoContrarrelojActivo = false;
             juegoEnCurso = false;
             tiempo = 0; // 🔧 Evita que el cronómetro cuente hacia delante después
+
+            // 🔒 Bloquear el tablero
+            tableroBloqueado = true;
+
+            // 🔁 Mostrar botón para reiniciar contrarreloj
+            mostrarBotonReinicioContrarreloj();
         }
     }, 1000);
 }
@@ -831,6 +844,29 @@ function actualizarCronometro(t) {
     segundosSpan.textContent = segundos.toString().padStart(2, "0");
 }
 
+function mostrarBotonReinicioContrarreloj() {
+    let btn = document.createElement("button");
+    btn.id = "reiniciarContrarreloj";
+    btn.textContent = "Reiniciar contrarreloj";
+    btn.style.marginTop = "10px";
+    btn.style.backgroundColor = "#9C27B0";
+    btn.style.color = "#fff";
+    btn.style.fontWeight = "bold";
+    btn.style.borderRadius = "8px";
+    btn.style.padding = "10px 16px";
+    btn.onclick = () => {
+        tableroBloqueado = false;
+        iniciarModoContrarreloj(tiempoOriginalContrarreloj);
+        document.getElementById("mensaje").textContent = "";
+        btn.remove();
+    };
+
+    // Aquí se inserta debajo del contador
+    document.getElementById("contador").insertAdjacentElement("afterend", btn);
+}
+
+
+
 
 
         crearTablero();
@@ -859,4 +895,3 @@ function actualizarCronometro(t) {
 
     
 </html>
-
