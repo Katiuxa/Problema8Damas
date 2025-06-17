@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=16")) {
-    const nuevaUrl = window.location.pathname + "?v=16";
+      if (!window.location.search.includes("v=17")) {
+    const nuevaUrl = window.location.pathname + "?v=17";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -1016,11 +1016,15 @@ function activarModoNormal() {
 }
 
 function mostrarSelectorTiempo() {
-    document.getElementById("selectorTiempo").style.display = "inline-block";
+    const selector = document.getElementById("selectorTiempo");
+    selector.selectedIndex = 0; // Reinicia a "Selecciona duración"
+    selector.style.display = "inline-block";
 }
 
+
 function iniciarModoContrarreloj(segundos) {
-    if (!segundos) return;
+    if (!segundos || isNaN(segundos)) return;
+
     tiempoOriginalContrarreloj = parseInt(segundos);
 
         // 🔴 DETENER cuenta atrás anterior si la hay
