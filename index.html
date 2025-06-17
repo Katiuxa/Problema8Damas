@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=19")) {
-    const nuevaUrl = window.location.pathname + "?v=19";
+      if (!window.location.search.includes("v=20")) {
+    const nuevaUrl = window.location.pathname + "?v=20";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -264,6 +264,17 @@
         font-size: 32px;
     }
 }
+h1 {
+  cursor: pointer;
+  font-size: 9vw; /* Por defecto en móvil */
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 32px; /* Tamaño más razonable en pantallas grandes */
+  }
+}
 
 
 
@@ -272,7 +283,8 @@
     </style>
 </head>
 <body>
-<h1 onclick="location.reload()" style="cursor:pointer; font-size: 10vw;">8 Damas</h1>
+<h1 onclick="location.reload()">8 Damas</h1>
+
 
     <div id="instrucciones">
         El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.
@@ -632,6 +644,10 @@ function abrirRedSocial(red, url, texto) {
 
 function activarDesafio() {
     modoDesafio = true;
+    modoContrarreloj = false;
+    modoContrarrelojActivo = false;
+    cuentaAtrasIniciada = false;
+
     tiempo = 0;
     detenerTemporizador();
     actualizarCronometro(0);
@@ -639,7 +655,6 @@ function activarDesafio() {
     resultado.textContent = "";
     compartirFinal.style.display = "none";
     document.getElementById("tablerosResueltos").style.display = "none";
-
 
     const solucion = generarSolucionValida(tamanoTablero);
 
@@ -649,59 +664,33 @@ function activarDesafio() {
 
     const seleccionadas = [...solucion].sort(() => 0.5 - Math.random()).slice(0, numFijas);
     damasFijas = seleccionadas;
-    damas = [...damasFijas];// Se colocan las fijas como punto de partida
-
-    function generarSolucionValida(n) {
-    const soluciones = [];
-    const estado = [];
-
-    function esSeguro(fila, col) {
-        for (let i = 0; i < fila; i++) {
-            const c = estado[i];
-            if (c === col || Math.abs(c - col) === fila - i) return false;
-        }
-        return true;
-    }
-
-    function backtrack(fila) {
-        if (fila === n) {
-            const solucion = estado.map((col, fila) => ({ fila, col }));
-            soluciones.push(solucion);
-            return;
-        }
-        for (let col = 0; col < n; col++) {
-            if (esSeguro(fila, col)) {
-                estado[fila] = col;
-                backtrack(fila + 1);
-            }
-        }
-    }
-
-    backtrack(0);
-    return soluciones[Math.floor(Math.random() * soluciones.length)];
-}
-
+    damas = [...damasFijas];
 
     crearTablero();
     actualizarEstado();
 }
 
-function activarModoNormal() {actualizarCronometro(0);
 
+function activarModoNormal() {
     modoDesafio = false;
+    modoContrarreloj = false;
+    modoContrarrelojActivo = false;
+    cuentaAtrasIniciada = false;
+
     tiempo = 0;
     detenerTemporizador();
-    document.getElementById("tablerosResueltos").style.display = "none";
-
     actualizarCronometro(0);
 
+    document.getElementById("tablerosResueltos").style.display = "none";
     resultado.textContent = "";
     compartirFinal.style.display = "none";
+    
     damas = [];
     damasFijas = [];
+    
     crearTablero();
-    actualizarEstado();
 }
+
 function mostrarSelectorTiempo() {
     document.getElementById("selectorTiempo").style.display = "inline-block";
 }
@@ -832,3 +821,4 @@ function actualizarCronometro(t) {
 
     
 </html>
+
