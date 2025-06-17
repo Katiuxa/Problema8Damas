@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=3")) {
-    const nuevaUrl = window.location.pathname + "?v=3";
+      if (!window.location.search.includes("v=2")) {
+    const nuevaUrl = window.location.pathname + "?v=2";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -470,7 +470,7 @@
             tablero.appendChild(letrasDiv);
         }
 
-        function manejarClick(fila, col) {
+       function manejarClick(fila, col) {
     if (damasFijas.some(d => d.fila === fila && d.col === col)) return;
 
     const index = damas.findIndex(d => d.fila === fila && d.col === col);
@@ -480,7 +480,12 @@
     } else if (damas.length < tamanoTablero) {
         damas.push({ fila, col });
 
-        // ⏱ Iniciar cuenta atrás al colocar la primera dama si es modo contrarreloj
+        // ✅ Iniciar cronómetro en modo normal o problema
+        if (!modoContrarreloj && !juegoEnCurso) {
+            iniciarTemporizador();
+        }
+
+        // ✅ Iniciar cuenta atrás en modo contrarreloj al colocar la primera dama del jugador
         if (modoContrarreloj && !cuentaAtrasIniciada && !esDamaFija(fila, col)) {
             cuentaAtrasIniciada = true;
             iniciarCuentaAtras();
@@ -489,6 +494,7 @@
 
     actualizarEstado();
 }
+
 
 function esDamaFija(fila, col) {
     return damasFijas.some(d => d.fila === fila && d.col === col);
