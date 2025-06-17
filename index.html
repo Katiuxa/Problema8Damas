@@ -7,8 +7,8 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <script>
-      if (!window.location.search.includes("v=55")) {
-    const nuevaUrl = window.location.pathname + "?v=55";
+      if (!window.location.search.includes("v=21")) {
+    const nuevaUrl = window.location.pathname + "?v=21";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -267,6 +267,14 @@
         font-size: 32px;
     }
 }
+
+@media (min-width: 768px) {
+    #reset {
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+}
+
 h1 {
   cursor: pointer;
   font-size: 9vw; /* Por defecto en móvil */
@@ -1133,6 +1141,8 @@ function mostrarBotonReinicioContrarreloj() {
 
 
         crearTablero();
+        contador.textContent = `${traducciones[idiomaActual].damasTablero}0 / ${tamanoTablero}`;
+
     </script>
 
         </script>
