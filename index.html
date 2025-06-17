@@ -6,10 +6,9 @@
     <title>Juego de las 8 Damas</title>
     <link rel="icon" type="image/png" href="favicon.png">
 
-
     <script>
-      if (!window.location.search.includes("v=7")) {
-    const nuevaUrl = window.location.pathname + "?v=7";
+      if (!window.location.search.includes("v=8")) {
+    const nuevaUrl = window.location.pathname + "?v=8";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -213,6 +212,8 @@
     }
 }
 
+
+
 #modoNormal {
     background-color: #607D8B; /* Gris azulado */
     color: #fff;
@@ -229,6 +230,42 @@
         font-size: 16px;
     }
 }
+
+#modoContrarreloj {
+    background-color: #9C27B0; /* Púrpura */
+    color: #fff;
+    font-weight: bold;
+    font-size: 4.2vw;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    padding: 10px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 768px) {
+    #modoContrarreloj {
+        font-size: 16px;
+    }
+}
+
+#cronometro {
+    font-family: 'Courier New', monospace;
+    font-size: 8vw;
+    font-weight: bold;
+    color: #333;
+    background-color: #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    margin: 10px 0;
+}
+@media (min-width: 768px) {
+    #cronometro {
+        font-size: 32px;
+    }
+}
+
+
 
 
              
@@ -265,9 +302,23 @@
     </div>
     <button id="modoNormal" onclick="activarModoNormal()">Modo normal</button>
     <button id="desafio" onclick="activarDesafio()">Modo problema</button>
+    <div class="controles">
+    <button id="modoContrarreloj" onclick="mostrarSelectorTiempo()">Modo contrarreloj</button>
+    <select id="selectorTiempo" style="display:none;" onchange="iniciarModoContrarreloj(this.value)">
+        <option value="">Selecciona duración</option>
+        <option value="60">1 minuto</option>
+        <option value="180">3 minutos</option>
+        <option value="300">5 minutos</option>
+    </select>
+</div>
+
    <div id="contador">Damas en el tablero: 0 / 8</div>
 
-<div id="tiempo">Tiempo: 0m 0s</div>
+<div id="cronometro"><span id="minutos">00</span>:<span id="segundos">00</span></div>
+
+<div id="tablerosResueltos" style="display: none; font-size: clamp(20px, 5vw, 36px); font-weight: bold; margin: 8px;">Tableros resueltos: 0</div>
+
+
 
 <div id="resultado"></div>
 
@@ -307,7 +358,9 @@
         const tablero = document.getElementById("tablero");
         const mensaje = document.getElementById("mensaje");
         const contador = document.getElementById("contador");
-        const tiempoDiv = document.getElementById("tiempo");
+        const minutosSpan = document.getElementById("minutos");
+        const segundosSpan = document.getElementById("segundos");
+
         const resultado = document.getElementById("resultado");
         const compartirFinal = document.getElementById("compartirFinal");
 
@@ -319,6 +372,10 @@
         let conflictos = [];
         let modoDesafio = false;
         let damasFijas = [];
+        let modoContrarreloj = false;
+        let tiempoRestante = 0;
+        let tablerosResueltos = 0;
+
 
 
         function iniciarTemporizador() {
@@ -326,9 +383,7 @@
                 juegoEnCurso = true;
                 intervalo = setInterval(() => {
                     tiempo++;
-                    const minutos = Math.floor(tiempo / 60);
-                    const segundos = tiempo % 60;
-                    tiempoDiv.textContent = `Tiempo: ${minutos}m ${segundos}s`;
+                    actualizarCronometro(tiempo);
                 }, 1000);
             }
         }
@@ -343,7 +398,8 @@
     tamanoTablero = parseInt(nuevoTamano);
     tiempo = 0;
     detenerTemporizador();
-    tiempoDiv.textContent = "Tiempo: 0m 0s";
+    actualizarCronometro(0);
+
     resultado.textContent = "";
     compartirFinal.style.display = "none";
 
@@ -441,30 +497,43 @@
         }
 
         function actualizarEstado() {
-            conflictos = [];
-            contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
-            if (damas.length === tamanoTablero) {
-                conflictos = detectarConflictos();
-                if (conflictos.length > 0) {
-                    mensaje.textContent = "Hay conflictos entre las damas.";
-                    contador.style.backgroundColor = "#ffcccc";
-                } else {
-                    mensaje.textContent = "";
-                    contador.style.backgroundColor = "#ccffcc";
-                    detenerTemporizador();
-                    const minutos = Math.floor(tiempo / 60);
-                    const segundos = tiempo % 60;
-                    resultado.innerHTML = `✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨`;
-                    compartirFinal.style.display = "flex";
-                }
+    conflictos = [];
+    contador.textContent = `Damas en el tablero: ${damas.length} / ${tamanoTablero}`;
+    
+    if (damas.length === tamanoTablero) {
+        conflictos = detectarConflictos();
+        
+        if (conflictos.length > 0) {
+            mensaje.textContent = "Hay conflictos entre las damas.";
+            contador.style.backgroundColor = "#ffcccc";
+        } else {
+            mensaje.textContent = "";
+            contador.style.backgroundColor = "#ccffcc";
+
+            if (modoContrarreloj) {
+                tablerosResueltos++;
+                document.getElementById("tablerosResueltos").textContent = `Tableros resueltos: ${tablerosResueltos}`;
+                siguienteTableroContrarreloj();
+            
+
             } else {
-                mensaje.textContent = "";
-                resultado.textContent = "";
-                contador.style.backgroundColor = "#eee";
-                compartirFinal.style.display = "none";
+                detenerTemporizador();
+                const minutos = Math.floor(tiempo / 60);
+                const segundos = tiempo % 60;
+                resultado.innerHTML = `✨ Has resuelto el tablero en ${minutos}m ${segundos}s.✨`;
+                compartirFinal.style.display = "flex";
             }
-            crearTablero();
         }
+    } else {
+        mensaje.textContent = "";
+        resultado.textContent = "";
+        contador.style.backgroundColor = "#eee";
+        compartirFinal.style.display = "none";
+    }
+
+    crearTablero();
+}
+
 
         function resetear() {
     if (modoDesafio) {
@@ -545,9 +614,12 @@ function activarDesafio() {
     modoDesafio = true;
     tiempo = 0;
     detenerTemporizador();
-    tiempoDiv.textContent = "Tiempo: 0m 0s";
+    actualizarCronometro(0);
+
     resultado.textContent = "";
     compartirFinal.style.display = "none";
+    document.getElementById("tablerosResueltos").style.display = "none";
+
 
     const solucion = generarSolucionValida(tamanoTablero);
 
@@ -594,11 +666,15 @@ function activarDesafio() {
     actualizarEstado();
 }
 
-function activarModoNormal() {
+function activarModoNormal() {actualizarCronometro(0);
+
     modoDesafio = false;
     tiempo = 0;
     detenerTemporizador();
-    tiempoDiv.textContent = "Tiempo: 0m 0s";
+    document.getElementById("tablerosResueltos").style.display = "none";
+
+    actualizarCronometro(0);
+
     resultado.textContent = "";
     compartirFinal.style.display = "none";
     damas = [];
@@ -606,10 +682,98 @@ function activarModoNormal() {
     crearTablero();
     actualizarEstado();
 }
+function mostrarSelectorTiempo() {
+    document.getElementById("selectorTiempo").style.display = "inline-block";
+}
+
+function iniciarModoContrarreloj(segundos) {
+    modoContrarreloj = true;
+    modoDesafio = true;
+    tablerosResueltos = 0;
+    tiempoRestante = parseInt(segundos);
+    document.getElementById("selectorTiempo").style.display = "none";
+
+    document.getElementById("tablerosResueltos").style.display = "block";
+    document.getElementById("tablerosResueltos").textContent = "Tableros resueltos: 0";
+
+    siguienteTableroContrarreloj();
+    iniciarCuentaAtras();
+}
+
+function siguienteTableroContrarreloj() {
+    const solucion = generarSolucionValida(tamanoTablero);
+    let numFijas = 2;
+    if (tamanoTablero === 9) numFijas = 3;
+    if (tamanoTablero >= 10) numFijas = 4;
+
+    damasFijas = [...solucion].sort(() => 0.5 - Math.random()).slice(0, numFijas);
+    damas = [...damasFijas];
+    crearTablero();
+    actualizarEstado();
+}
+function iniciarCuentaAtras() {
+    detenerTemporizador(); // Evita superposiciones
+    actualizarCronometro(tiempoRestante); // Muestra el tiempo inicial
+
+    intervalo = setInterval(() => {
+        tiempoRestante--;
+        actualizarCronometro(tiempoRestante);
+
+        if (tiempoRestante <= 0) {
+            clearInterval(intervalo);
+            intervalo = null;
+            actualizarCronometro(0);
+            document.getElementById("cronometro").style.backgroundColor = "#ffcccc";
+            document.getElementById("mensaje").textContent = `⏱ ¡Tiempo agotado! Has completado ${tablerosResueltos} tablero(s).`;
+            modoContrarreloj = false;
+            juegoEnCurso = false;
+        }
+    }, 1000);
+}
+
+
+
+function generarSolucionValida(n) {
+    const soluciones = [];
+    const estado = [];
+
+    function esSeguro(fila, col) {
+        for (let i = 0; i < fila; i++) {
+            const c = estado[i];
+            if (c === col || Math.abs(c - col) === fila - i) return false;
+        }
+        return true;
+    }
+
+    function backtrack(fila) {
+        if (fila === n) {
+            const solucion = estado.map((col, fila) => ({ fila, col }));
+            soluciones.push(solucion);
+            return;
+        }
+        for (let col = 0; col < n; col++) {
+            if (esSeguro(fila, col)) {
+                estado[fila] = col;
+                backtrack(fila + 1);
+            }
+        }
+    }
+
+    backtrack(0);
+    return soluciones[Math.floor(Math.random() * soluciones.length)];
+}
+function actualizarCronometro(t) {
+    const minutos = Math.floor(t / 60);
+    const segundos = t % 60;
+    minutosSpan.textContent = minutos.toString().padStart(2, "0");
+    segundosSpan.textContent = segundos.toString().padStart(2, "0");
+}
 
 
 
         crearTablero();
     </script>
 </body>
+
+    
 </html>
