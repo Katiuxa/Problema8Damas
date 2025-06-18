@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=22")) {
-    const nuevaUrl = window.location.pathname + "?v=22";
+      if (!window.location.search.includes("v=23")) {
+    const nuevaUrl = window.location.pathname + "?v=23";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -358,7 +358,12 @@ h1 {
 }
 
 </style>
-
+ <div id="selector-idioma">
+  <button onclick="cambiarIdioma('es')">Español</button>
+  <button onclick="cambiarIdioma('en')">English</button>
+  <button onclick="cambiarIdioma('fr')">Français</button>
+  <button onclick="cambiarIdioma('de')">Deutsch</button>
+</div>
 
 
     <div id="instrucciones">
@@ -366,12 +371,7 @@ h1 {
         
     </div>
 
-    <div id="selector-idioma">
-  <button onclick="cambiarIdioma('es')">Español</button>
-  <button onclick="cambiarIdioma('en')">English</button>
-  <button onclick="cambiarIdioma('fr')">Français</button>
-  <button onclick="cambiarIdioma('de')">Deutsch</button>
-</div>
+   
 
 
 
