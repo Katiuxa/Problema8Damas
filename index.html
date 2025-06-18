@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=18")) {
-    const nuevaUrl = window.location.pathname + "?v=18";
+      if (!window.location.search.includes("v=21")) {
+    const nuevaUrl = window.location.pathname + "?v=21";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -1077,9 +1077,9 @@ function reiniciarContrarreloj() {
 function siguienteTableroContrarreloj() {
     cuentaAtrasIniciada = false; // importante para el siguiente tablero
     const solucion = generarSolucionValida(tamanoTablero);
-    let numFijas = 3;
-    if (tamanoTablero === 9) numFijas = 3;
-    if (tamanoTablero >= 10) numFijas = 4;
+    let numFijas = 4;
+    if (tamanoTablero === 9) numFijas = 5;
+    if (tamanoTablero >= 10) numFijas = 6;
 
     damasFijas = [...solucion].sort(() => 0.5 - Math.random()).slice(0, numFijas);
     damas = [...damasFijas];
