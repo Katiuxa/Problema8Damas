@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=23")) {
-    const nuevaUrl = window.location.pathname + "?v=23";
+      if (!window.location.search.includes("v=24")) {
+    const nuevaUrl = window.location.pathname + "?v=24";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -1018,11 +1018,13 @@ function activarModoNormal() {
 function mostrarSelectorTiempo() {
   const selector = document.getElementById("selectorTiempo");
 
-  // Alternar visibilidad
-  if (selector.style.display === "none" || selector.style.display === "") {
-    selector.style.display = "inline-block";
-  } else {
+  if (selector.style.display === "inline-block") {
+    // Ya estaba visible → lo ocultamos
     selector.style.display = "none";
+  } else {
+    // Estaba oculto → lo mostramos y reiniciamos selección
+    selector.style.display = "inline-block";
+    selector.value = "";
   }
 }
 
