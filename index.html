@@ -975,9 +975,9 @@ function activarDesafio() {
 
     const solucion = generarSolucionValida(tamanoTablero);
 
-    let numFijas = 3;
-    if (tamanoTablero === 9) numFijas = 4;
-    if (tamanoTablero >= 10) numFijas = 4;
+    let numFijas = 4;
+    if (tamanoTablero === 9) numFijas = 5;
+    if (tamanoTablero >= 10) numFijas = 5;
 
     const seleccionadas = [...solucion].sort(() => 0.5 - Math.random()).slice(0, numFijas);
     damasFijas = seleccionadas;
