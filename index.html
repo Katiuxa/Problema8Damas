@@ -1016,9 +1016,14 @@ function activarModoNormal() {
 }
 
 function mostrarSelectorTiempo() {
-    const selector = document.getElementById("selectorTiempo");
-    selector.selectedIndex = 0; // Reinicia a "Selecciona duración"
+  const selector = document.getElementById("selectorTiempo");
+
+  // Alternar visibilidad
+  if (selector.style.display === "none" || selector.style.display === "") {
     selector.style.display = "inline-block";
+  } else {
+    selector.style.display = "none";
+  }
 }
 
 
