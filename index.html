@@ -6,11 +6,12 @@
     <title>8 Damas</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
 
 
     <script>
-      if (!window.location.search.includes("v=50")) {
-    const nuevaUrl = window.location.pathname + "?v=50";
+      if (!window.location.search.includes("v=51")) {
+    const nuevaUrl = window.location.pathname + "?v=51";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -326,6 +327,35 @@ h1 {
         padding: 6px 14px;
     }
 }
+#botonInstrucciones {
+    background-color: #ffffff;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 4vw;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+#botonInstrucciones:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f7f7f7;
+}
+
+@media (min-width: 768px) {
+    #botonInstrucciones {
+        font-size: 16px;
+        padding: 10px 24px;
+    }
+}
+
 
   
 
@@ -364,12 +394,23 @@ h1 {
   <button onclick="cambiarIdioma('fr')">Français</button>
   <button onclick="cambiarIdioma('de')">Deutsch</button>
 </div>
+<button id="botonInstrucciones" onclick="toggleInstrucciones()">¿Cómo jugar?</button>
 
 
-    <div id="instrucciones">
-        El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.
-        
-    </div>
+
+<div id="instrucciones" style="display: none;">
+    <p><strong>El problema de las 8 damas</strong> es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra.<br>
+Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.</p>
+
+<p><strong>Modo normal:</strong> Coloca libremente las damas hasta completar una solución sin conflictos.<br></p>
+
+<p><strong>Modo problema:</strong> Resuelve el tablero a partir de varias damas ya colocadas.<br>
+Todas pertenecen a una solución válida y no pueden moverse.</p>
+
+<p><strong>Modo contrarreloj:</strong> Completa tantos tableros como puedas antes de que el tiempo se agote. Cada tablero empieza con algunas damas fijas.</p>
+
+</div>
+
 
    
 
@@ -480,8 +521,13 @@ h1 {
   const logo = document.getElementById("logo");
   if (logo) logo.textContent = t.titulo;
 
+  const botonInstrucciones = document.getElementById("botonInstrucciones");
+if (botonInstrucciones) botonInstrucciones.textContent = t.botonInstrucciones;
+
+
   const instrucciones = document.getElementById("instrucciones");
-  if (instrucciones) instrucciones.textContent = t.instrucciones;
+  if (instrucciones) instrucciones.innerHTML = t.instrucciones;
+
 
   // Etiquetas y botones
   const labelTamano = document.querySelector("label[for='tamano']");
@@ -559,7 +605,7 @@ h1 {
 const traducciones = {
   es: {
     titulo: "8 DAMAS",
-    instrucciones: "El problema de las 8 damas es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra. Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.",
+    instrucciones: `<p><strong>El problema de las 8 damas</strong> es un clásico de ajedrez y lógica: consiste en colocar 8 damas en un tablero de ajedrez (8x8) de modo que ninguna dama ataque a otra.<br>Es decir, no puede haber dos damas en la misma fila, columna ni diagonal.</p><p><strong>Modo normal:</strong> Coloca libremente las damas hasta completar una solución sin conflictos.</p><p><strong>Modo problema:</strong> Resuelve el tablero a partir de varias damas ya colocadas. Todas pertenecen a una solución válida y no pueden moverse.</p><p><strong>Modo contrarreloj:</strong> Completa tantos tableros como puedas antes de que el tiempo se agote. Cada uno empieza con algunas damas fijas.</p>`, 
     tamanoTablero: "Tamaño del tablero:",
     modoNormal: "Modo normal",
     modoProblema: "Modo problema",
@@ -579,11 +625,13 @@ const traducciones = {
     vaciar: "Vaciar tablero",
     tablerosResueltos: "Tableros resueltos:",
     titulo: "8 DAMAS",
+    botonInstrucciones: "¿Cómo se juega?",
+
 
   },
   en: {
     titulo: "8 QUEENS",
-    instrucciones: "The 8 queens problem is a classic chess and logic challenge: place 8 queens on a standard 8x8 chessboard so that none of them attack each other. That means no two queens can share the same row, column, or diagonal.",
+    instrucciones: `<p><strong>The 8 queens problem</strong> is a classic chess and logic challenge: place 8 queens on an 8x8 board so that none of them attack each other.<br>That means no two queens can share the same row, column, or diagonal.</p><p><strong>Normal mode:</strong> Freely place queens until you complete a valid solution.</p><p><strong>Challenge mode:</strong> Solve the board with some queens already placed. They belong to a valid solution and cannot be moved.</p><p><strong>Timed mode:</strong> Solve as many boards as possible before time runs out. Each starts with fixed queens.</p>`,
     tamanoTablero: "Board size:",
     modoNormal: "Normal mode",
     modoProblema: "Challenge mode",
@@ -603,12 +651,15 @@ const traducciones = {
     vaciar: "Clear board",
     tablerosResueltos: "Boards solved:",
     titulo: "8 QUEENS",
+    botonInstrucciones: "How to play?",
+
+
 
 
   },
   fr: {
     titulo: "8 REINES",
-    instrucciones: "Le problème des 8 reines est un classique des échecs et de la logique : il s'agit de placer 8 reines sur un échiquier 8x8 de manière à ce qu'aucune ne puisse en attaquer une autre. Autrement dit, elles ne doivent pas être sur la même ligne, colonne ou diagonale.",
+    instrucciones: `<p><strong>Le problème des 8 reines</strong> est un classique des échecs et de la logique : placer 8 reines sur un échiquier 8x8 de manière à ce qu'aucune ne puisse en attaquer une autre.<br>Autrement dit, elles ne doivent pas être sur la même ligne, colonne ou diagonale.</p><p><strong>Mode normal :</strong> Placez librement les reines jusqu'à compléter une solution valide.</p><p><strong>Mode défi :</strong> Résolvez l’échiquier avec plusieurs reines déjà placées. Elles font partie d'une solution valide et ne peuvent pas être déplacées.</p><p><strong>Mode chronométré :</strong> Résolvez autant d’échiquiers que possible avant la fin du temps. Chacun commence avec des reines fixes.</p>`,
     tamanoTablero: "Taille de l'échiquier :",
     modoNormal: "Mode normal",
     modoProblema: "Mode défi",
@@ -628,12 +679,14 @@ const traducciones = {
     vaciar: "Vider l’échiquier",
     tablerosResueltos: "Échiquiers résolus :",
     titulo: "8 REINES",
+botonInstrucciones: "Comment jouer ?",
+
 
 
   },
   de: {
     titulo: "8 DAMEN",
-    instrucciones: "Das 8-Damen-Problem ist ein klassisches Schach- und Logikrätsel: Es geht darum, 8 Damen auf einem 8x8-Schachbrett so zu platzieren, dass sie sich gegenseitig nicht angreifen. Keine zwei Damen dürfen sich in der gleichen Reihe, Spalte oder Diagonale befinden.",
+instrucciones: `<p><strong>Das 8-Damen-Problem</strong> ist ein klassisches Schach- und Logikrätsel: Platziere 8 Damen auf einem 8x8-Brett, sodass sie sich nicht gegenseitig angreifen.<br>Keine zwei Damen dürfen sich in der gleichen Reihe, Spalte oder Diagonale befinden.</p><p><strong>Normaler Modus:</strong> Platziere die Damen frei, bis du eine gültige Lösung findest.</p><p><strong>Problem-Modus:</strong> Löse das Brett mit bereits platzierten Damen. Sie gehören zu einer gültigen Lösung und dürfen nicht bewegt werden.</p><p><strong>Zeitmodus:</strong> Löse so viele Bretter wie möglich, bevor die Zeit abläuft. Jedes beginnt mit festen Damen.</p>`,
     tamanoTablero: "Brettgröße:",
     modoNormal: "Normaler Modus",
     modoProblema: "Problem-Modus",
@@ -654,6 +707,9 @@ const traducciones = {
     
     tablerosResueltos: "Gelöste Bretter:",
     titulo: "8 DAMEN",
+botonInstrucciones: "Wie spielt man?",
+
+    
 
   }
 };
@@ -1061,6 +1117,9 @@ function iniciarModoContrarreloj(segundos) {
     siguienteTableroContrarreloj(); 
     
     cambiarIdioma(idiomaActual);
+    
+if (botonInstrucciones) botonInstrucciones.textContent = t.botonInstrucciones;
+
 // 👈 pero NO iniciar cuenta atrás hasta la primera dama
 }
 
@@ -1167,6 +1226,10 @@ function mostrarBotonReinicioContrarreloj() {
     }
 }
 
+function toggleInstrucciones() {
+    const instrucciones = document.getElementById("instrucciones");
+    instrucciones.style.display = instrucciones.style.display === "none" ? "block" : "none";
+}
 
 
 
