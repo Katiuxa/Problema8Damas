@@ -9,8 +9,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=60")) {
-    const nuevaUrl = window.location.pathname + "?v=60";
+      if (!window.location.search.includes("v=61")) {
+    const nuevaUrl = window.location.pathname + "?v=61";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -752,40 +752,29 @@ const traducciones = {
 
                 const row = document.createElement("div");
                 row.style.display = "flex";
-            for (let col = 0; col < tamanoTablero; col++) {
-    const casilla = document.createElement("div");
-    casilla.className = "casilla";
-    casilla.classList.add((fila + col) % 2 === 0 ? "blanca" : "negra");
+                for (let col = 0; col < tamanoTablero; col++) {
+                    const casilla = document.createElement("div");
+                    casilla.className = "casilla";
+                   casilla.classList.add((fila + col) % 2 === 0 ? "blanca" : "negra");
 
-    casilla.dataset.fila = fila;
-    casilla.dataset.col = col;
-    casilla.onclick = () => manejarClick(fila, col);
-
-    const dama = damas.find(d => d.fila === fila && d.col === col);
-    if (dama) {
-        const img = document.createElement("img");
-        img.style.width = "80%";
-        img.style.height = "80%";
-        img.style.pointerEvents = "none";
-
-        const esFija = damasFijas.some(d => d.fila === fila && d.col === col);
-        const enConflicto = conflictos.some(c => c.fila === fila && c.col === col);
-
-        if (enConflicto) {
-            img.src = "https://raw.githubusercontent.com/Katiuxa/Problema8Damas/main/DamaRoja.png";
-        } else if (esFija) {
-            img.src = "https://raw.githubusercontent.com/Katiuxa/Problema8Damas/main/DamaVerde.png";
-        } else {
-            img.src = "https://raw.githubusercontent.com/Katiuxa/Problema8Damas/main/DamaNegra.png";
-        }
-
-        casilla.appendChild(img);
-    }
-
-    row.appendChild(casilla);
+                    casilla.dataset.fila = fila;
+                    casilla.dataset.col = col;
+                    casilla.onclick = () => manejarClick(fila, col);
+                    const dama = damas.find(d => d.fila === fila && d.col === col);
+                    if (dama) {
+                      casilla.textContent = "♕";
+                        if (damasFijas.some(d => d.fila === fila && d.col === col)) {
+                    casilla.classList.add("fija");
+                }
+                      if (conflictos.some(c => c.fila === fila && c.col === col)) {
+                    casilla.classList.add("en-conflicto");
+                }
 }
-filaCompleta.appendChild(row);
-tablero.appendChild(filaCompleta);
+
+                    row.appendChild(casilla);
+                }
+                filaCompleta.appendChild(row);
+                tablero.appendChild(filaCompleta);
             }
 
             const letrasDiv = document.createElement("div");
@@ -1210,7 +1199,5 @@ function mostrarBotonReinicioContrarreloj() {
 
 </body>
 
-</html>
-
     
-
+</html>
