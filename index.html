@@ -567,11 +567,11 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
         let idiomaActual = 'es';
 
         function cambiarIdioma(lang) {
-            const t = traducciones[lang];
-            if (!t) return;
+  const t = traducciones[lang];
+  if (!t) return;
 
-            idiomaActual = lang;
-                document.title = t.titulo;
+  idiomaActual = lang;
+    document.title = t.titulo;
 
 
   // Título y descripción
@@ -581,8 +581,6 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
   const botonInstrucciones = document.getElementById("botonInstrucciones");
 if (botonInstrucciones) botonInstrucciones.textContent = t.botonInstrucciones;
 
-const botonRanking = document.getElementById("botonRanking");
-if (botonRanking) botonRanking.textContent = traducciones[lang].botonRanking;
 
   const instrucciones = document.getElementById("instrucciones");
   if (instrucciones) instrucciones.innerHTML = t.instrucciones;
@@ -685,8 +683,7 @@ const traducciones = {
     tablerosResueltos: "Tableros resueltos:",
     titulo: "8 DAMAS",
     botonInstrucciones: "¿Cómo jugar?",
- botonRanking: "🏆 Ranking Contrarreloj",
-  promptNombre: "¡Buen trabajo! Escribe tu nombre para el ranking:",
+
 
   },
   en: {
@@ -712,9 +709,6 @@ const traducciones = {
     tablerosResueltos: "Boards solved:",
     titulo: "8 QUEENS",
     botonInstrucciones: "How to play?",
-   
-  botonRanking: "🏆 Timed Ranking",
-  promptNombre: "Nice job! Enter your name for the ranking:",
 
 
 
@@ -743,8 +737,6 @@ const traducciones = {
     tablerosResueltos: "Échiquiers résolus :",
     titulo: "8 REINES",
 botonInstrucciones: "Comment jouer ?",
- botonRanking: "🏆 Classement chronométré",
-  promptNombre: "Bravo ! Entrez votre nom pour le classement :",
 
 
 
@@ -773,8 +765,6 @@ instrucciones: `<p><strong>Das 8-Damen-Problem</strong> ist ein klassisches Scha
     tablerosResueltos: "Gelöste Bretter:",
     titulo: "8 DAMEN",
 botonInstrucciones: "Wie spielt man?",
- botonRanking: "🏆 Zeit-Rangliste",
-  promptNombre: "Gute Arbeit! Gib deinen Namen für die Rangliste ein:",
 
     
 
@@ -1234,8 +1224,7 @@ function iniciarCuentaAtras() {
 
     // 🔥 GUARDAR EN RANKING SI COMPLETÓ 2 O MÁS
     if (tablerosResueltos >= 2) {
-    const nombre = prompt("¡Buen trabajo! Escribe tu nombre para el ranking:");
-
+        const nombre = prompt("¡Buen trabajo! Escribe tu nombre para el ranking:");
         if (nombre) {
             guardarEnRanking(nombre, tamanoTablero, tiempoOriginalContrarreloj, tablerosResueltos);
         }
