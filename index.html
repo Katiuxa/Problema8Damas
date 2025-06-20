@@ -13,8 +13,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=7")) {
-    const nuevaUrl = window.location.pathname + "?v=7";
+      if (!window.location.search.includes("v=8")) {
+    const nuevaUrl = window.location.pathname + "?v=8";
     window.location.replace(nuevaUrl);
   }
 </script>
@@ -424,7 +424,7 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
     <div class="controles">
        
 
-        <label for="tamano">Tamaño del tablero:</label>
+        <label for="tamano"><strong>Tamaño del tablero:</strong></label>
         <select id="tamano" onchange="cambiarTamano(this.value)">
             <option value="8" selected>8x8</option>
             <option value="9">9x9</option>
