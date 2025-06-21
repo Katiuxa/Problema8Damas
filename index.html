@@ -14,8 +14,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=4")) {
-    const nuevaUrl = window.location.pathname + "?v=4";
+      if (!window.location.search.includes("v=12")) {
+    const nuevaUrl = window.location.pathname + "?v=12";
     window.location.replace(nuevaUrl);
   }
 
@@ -458,7 +458,7 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
        
 
         
-
+        <label for="tamano"><strong>Tamaño del tablero:</strong></label>
         <select id="tamano" onchange="cambiarTamano(this.value)">
             <option value="8" selected>8x8</option>
             <option value="9">9x9</option>
@@ -524,20 +524,23 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
 
 
 <div id="ranking" style="display: none; max-width: 600px; margin-top: 20px; text-align: center; background: #fff; border: 1px solid #ccc; padding: 12px; border-radius: 10px;">
-  <label for="rankingTamano">Tamaño:</label>
-  <select id="rankingTamano" onchange="mostrarRanking()">
-    <option value="8">8x8</option>
-    <option value="9">9x9</option>
-    <option value="10">10x10</option>
-    <option value="11">11x11</option>
-  </select>
+  <label for="rankingTamano"><strong>Tablero:</strong></label>
 
-  <label for="rankingTiempo">Duración:</label>
-  <select id="rankingTiempo" onchange="mostrarRanking()">
-    <option value="60">1 min</option>
-    <option value="180">3 min</option>
-    <option value="300">5 min</option>
-  </select>
+<select id="rankingTamano" onchange="mostrarRanking()">
+  <option value="8" selected>8x8</option>
+  <option value="9">9x9</option>
+  <option value="10">10x10</option>
+  <option value="11">11x11</option>
+</select><br><br>
+<label for="rankingTiempo"><strong>Duración:</strong></label>
+
+<select id="rankingTiempo" onchange="mostrarRanking()">
+  <option value="60">1 min</option>
+  <option value="180">3 min</option>
+  <option value="300">5 min</option>
+</select>
+
+
 
   <div id="rankingLista" style="margin-top: 12px;"></div>
 </div>
@@ -686,13 +689,11 @@ const traducciones = {
     tablerosResueltos: "Tableros resueltos:",
     titulo: "8 DAMAS",
     botonInstrucciones: "¿Cómo jugar?",
-rankingTitulo: "🏆 Ranking Contrarreloj",
-rankingTamano: "Tamaño:",
+    rankingTitulo: "🏆 Ranking Contrarreloj",
+rankingTamano: "Tablero:",
 rankingDuracion: "Duración:",
 cargando: "Cargando...",
 sinPuntuaciones: "No hay puntuaciones aún.",
-
-
 
   },
   en: {
@@ -718,12 +719,11 @@ sinPuntuaciones: "No hay puntuaciones aún.",
     tablerosResueltos: "Boards solved:",
     titulo: "8 QUEENS",
     botonInstrucciones: "How to play?",
-      rankingTitulo: "🏆 Timed Mode Ranking",
+rankingTitulo: "🏆 Timed Mode Ranking",
   rankingTamano: "Board size:",
   rankingDuracion: "Duration:",
   cargando: "Loading...",
   sinPuntuaciones: "No scores yet.",
-
 
 
 
@@ -751,11 +751,11 @@ sinPuntuaciones: "No hay puntuaciones aún.",
     tablerosResueltos: "Échiquiers résolus :",
     titulo: "8 REINES",
 botonInstrucciones: "Comment jouer ?",
-rankingTitulo: "🏆 Classement chronométré",
-  rankingTamano: "Taille :",
+ rankingTamano: "Taille :",
   rankingDuracion: "Durée :",
   cargando: "Chargement...",
   sinPuntuaciones: "Aucun score pour l’instant.",
+
 
 
   },
@@ -783,7 +783,7 @@ instrucciones: `<p><strong>Das 8-Damen-Problem</strong> ist ein klassisches Scha
     tablerosResueltos: "Gelöste Bretter:",
     titulo: "8 DAMEN",
 botonInstrucciones: "Wie spielt man?",
-      rankingTitulo: "🏆 Zeitmodus-Rangliste",
+  rankingTitulo: "🏆 Zeitmodus-Rangliste",
   rankingTamano: "Größe:",
   rankingDuracion: "Dauer:",
   cargando: "Wird geladen...",
@@ -1418,9 +1418,13 @@ function mostrarRanking() {
         text-align: center;
         font-size: 0.9em;
         color: #666;
-        background-color: transparent;
+        background-color: transparent
       }
+
+      
     </style>
+
+    
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
