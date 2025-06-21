@@ -14,8 +14,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=14")) {
-    const nuevaUrl = window.location.pathname + "?v=14";
+      if (!window.location.search.includes("v=15")) {
+    const nuevaUrl = window.location.pathname + "?v=15";
     window.location.replace(nuevaUrl);
   }
 
@@ -1311,16 +1311,19 @@ function guardarEnRanking(nombre, tamano, duracion, puntuacion) {
     const clave = `ranking/${tamano}x${tamano}_${duracion}s`;
     const nuevaEntrada = { nombre, puntuacion };
 
-    // Generar una nueva entrada única
     db.ref(clave).push(nuevaEntrada, error => {
         if (error) {
             console.error("Error al guardar en Firebase:", error);
         } else {
             console.log("Puntuación guardada correctamente en Firebase");
-            mostrarRanking(); // refrescar ranking tras guardar
+            // 🔄 actualizar selects para que el ranking muestre este modo
+            document.getElementById("rankingTamano").value = tamano;
+            document.getElementById("rankingTiempo").value = duracion;
+            mostrarRanking(); // mostrarlo al instante
         }
     });
 }
+
 
 
 function mostrarRanking() {
