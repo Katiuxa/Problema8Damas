@@ -14,8 +14,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=12")) {
-    const nuevaUrl = window.location.pathname + "?v=12";
+      if (!window.location.search.includes("v=15")) {
+    const nuevaUrl = window.location.pathname + "?v=15";
     window.location.replace(nuevaUrl);
   }
 
@@ -578,6 +578,8 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
 
   idiomaActual = lang;
     document.title = t.titulo;
+    const botonRanking = document.getElementById("botonRanking");
+if (botonRanking) botonRanking.textContent = t.rankingTitulo;
 
 
   // Título y descripción
@@ -755,6 +757,8 @@ botonInstrucciones: "Comment jouer ?",
   rankingDuracion: "Durée :",
   cargando: "Chargement...",
   sinPuntuaciones: "Aucun score pour l’instant.",
+  rankingTitulo: "🏆 Classement Chronométré",
+
 
 
 
@@ -788,11 +792,15 @@ botonInstrucciones: "Wie spielt man?",
   rankingDuracion: "Dauer:",
   cargando: "Wird geladen...",
   sinPuntuaciones: "Noch keine Punktzahlen.",
+rankingTitulo: "🏆 Zeitmodus-Rangliste",
 
     
 
   }
 };
+
+        const tituloRanking = document.getElementById("tituloRanking");
+
 
         const tablero = document.getElementById("tablero");
         const mensaje = document.getElementById("mensaje");
@@ -1383,7 +1391,8 @@ function mostrarRanking() {
             datos.sort((a, b) => b.puntuacion - a.puntuacion);
 
             if (datos.length === 0) {
-                contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
+                contenedor.innerHTML = `<em>${traducciones[idiomaActual].sinPuntuaciones}</em>`;
+
                 return;
             }
 
