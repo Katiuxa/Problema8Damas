@@ -14,8 +14,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=13")) {
-    const nuevaUrl = window.location.pathname + "?v=13";
+      if (!window.location.search.includes("v=14")) {
+    const nuevaUrl = window.location.pathname + "?v=14";
     window.location.replace(nuevaUrl);
   }
 
@@ -1333,7 +1333,7 @@ function mostrarRanking() {
 
   db.ref(clave)
     .orderByChild("puntuacion")
-    .limitToLast(20)
+    //.limitToLast(20)
     .once("value", snapshot => {
       const data = [];
       snapshot.forEach(child => data.push(child.val()));
