@@ -14,8 +14,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=15")) {
-    const nuevaUrl = window.location.pathname + "?v=15";
+      if (!window.location.search.includes("v=3")) {
+    const nuevaUrl = window.location.pathname + "?v=3";
     window.location.replace(nuevaUrl);
   }
 
@@ -1311,6 +1311,22 @@ function guardarEnRanking(nombre, tamano, duracion, puntuacion) {
     const clave = `ranking/${tamano}x${tamano}_${duracion}s`;
     const nuevaEntrada = { nombre, puntuacion };
 
+    // Generar una nueva entrada única
+    db.ref(clave).push(nuevaEntrada, error => {
+        if (error) {
+            console.error("Error al guardar en Firebase:", error);
+        } else {
+            console.log("Puntuación guardada correctamente en Firebase");
+            mostrarRanking(); // refrescar ranking tras guardar
+        }
+    });
+}
+
+
+function guardarEnRanking(nombre, tamano, duracion, puntuacion) {
+    const clave = `ranking/${tamano}x${tamano}_${duracion}s`;
+    const nuevaEntrada = { nombre, puntuacion };
+
     db.ref(clave).push(nuevaEntrada, error => {
         if (error) {
             console.error("Error al guardar en Firebase:", error);
@@ -1327,36 +1343,39 @@ function guardarEnRanking(nombre, tamano, duracion, puntuacion) {
 
 
 function mostrarRanking() {
-  const tam = document.getElementById("rankingTamano").value;
-  const dur = document.getElementById("rankingTiempo").value;
-  const clave = `ranking/${tam}x${tam}_${dur}s`;
+    const tamano = document.getElementById("rankingTamano").value;
+    const duracion = document.getElementById("rankingTiempo").value;
+    const clave = `ranking/${tamano}x${tamano}_${duracion}s`;
 
-  const contenedor = document.getElementById("rankingLista");
-  contenedor.innerHTML = "<em>Cargando...</em>";
+    const contenedor = document.getElementById("rankingLista");
+    contenedor.innerHTML = "<em>Cargando...</em>";
 
-  db.ref(clave)
-    .orderByChild("puntuacion")
-    //.limitToLast(20)
-    .once("value", snapshot => {
-      const data = [];
-      snapshot.forEach(child => data.push(child.val()));
+    db.ref(clave)
+        .orderByChild("puntuacion")
+        .limitToLast(20)
+        .once("value", snapshot => {
+            const datos = [];
+            snapshot.forEach(child => {
+                datos.push(child.val());
+            });
 
-      data.sort((a, b) => b.puntuacion - a.puntuacion);
+            // Ordenar descendente (mayor puntuación primero)
+            datos.sort((a, b) => b.puntuacion - a.puntuacion);
 
-      if (data.length === 0) {
-        contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
-        return;
-      }
+            if (datos.length === 0) {
+                contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
+                return;
+            }
 
-      contenedor.innerHTML = "<ol style='padding-left: 20px;'>";
-      data.forEach(j => {
-        contenedor.innerHTML += `<li><strong>${j.nombre}</strong>: ${j.puntuacion} tablero(s)</li>`;
-      });
-      contenedor.innerHTML += "</ol>";
-    });
+            // Crear lista en HTML
+            let html = "<ol style='text-align: left; padding-left: 20px;'>";
+            datos.forEach((d, i) => {
+                html += `<li><strong>${d.nombre}</strong>: ${d.puntuacion}</li>`;
+            });
+            html += "</ol>";
+            contenedor.innerHTML = html;
+        });
 }
-
-
 
 
 
