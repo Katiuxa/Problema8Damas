@@ -14,8 +14,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=3")) {
-    const nuevaUrl = window.location.pathname + "?v=3";
+      if (!window.location.search.includes("v=4")) {
+    const nuevaUrl = window.location.pathname + "?v=4";
     window.location.replace(nuevaUrl);
   }
 
@@ -1325,27 +1325,33 @@ function mostrarRanking() {
   const contenedor = document.getElementById("rankingLista");
   contenedor.innerHTML = "<em>Cargando...</em>";
 
-  db.ref(clave)
-    .orderByChild("puntuacion")
-    .limitToLast(20)
-    .once("value", snapshot => {
-      const data = [];
-      snapshot.forEach(child => data.push(child.val()));
+  db.ref(clave).once("value", snapshot => {
+    const datos = snapshot.val();
 
-      data.sort((a, b) => b.puntuacion - a.puntuacion);
+    if (!datos) {
+      contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
+      return;
+    }
 
-      if (data.length === 0) {
-        contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
-        return;
-      }
+    // Convertir objeto a array y ordenar
+    const lista = Object.values(datos)
+      .filter(e => e && typeof e.puntuacion === "number")
+      .sort((a, b) => b.puntuacion - a.puntuacion)
+      .slice(0, 20); // mostrar solo 20 mejores
 
-      contenedor.innerHTML = "<ol style='padding-left: 20px;'>";
-      data.forEach(j => {
-        contenedor.innerHTML += `<li><strong>${j.nombre}</strong>: ${j.puntuacion} tablero(s)</li>`;
-      });
-      contenedor.innerHTML += "</ol>";
+    if (lista.length === 0) {
+      contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
+      return;
+    }
+
+    contenedor.innerHTML = "<ol style='padding-left: 20px;'>";
+    lista.forEach(j => {
+      contenedor.innerHTML += `<li><strong>${j.nombre}</strong>: ${j.puntuacion} tablero(s)</li>`;
     });
+    contenedor.innerHTML += "</ol>";
+  });
 }
+
 
 
 
