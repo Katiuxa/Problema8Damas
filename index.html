@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,10 +14,12 @@
 
 
     <script>
-      if (!window.location.search.includes("v=8")) {
-    const nuevaUrl = window.location.pathname + "?v=8";
+      if (!window.location.search.includes("v=3")) {
+    const nuevaUrl = window.location.pathname + "?v=3";
     window.location.replace(nuevaUrl);
   }
+
+
 </script>
     <style>
         body {
@@ -360,7 +363,37 @@ h1 {
 }
 
 
-  
+  #botonRanking {
+    background-color: #ffffff;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 4vw;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+    display: inline-block;
+}
+
+#botonRanking:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f7f7f7;
+}
+
+@media (min-width: 768px) {
+    #botonRanking {
+        font-size: 16px;
+        padding: 10px 24px;
+    }
+}
+
 
 
 
@@ -424,7 +457,8 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
     <div class="controles">
        
 
-        <label for="tamano"><strong>Tamaño del tablero:</strong></label>
+        
+
         <select id="tamano" onchange="cambiarTamano(this.value)">
             <option value="8" selected>8x8</option>
             <option value="9">9x9</option>
@@ -485,6 +519,29 @@ Todas pertenecen a una solución válida y no pueden moverse.</p>
 
 
     <button id="reset" onclick="resetear()">Vaciar tablero</button>
+
+   <button id="botonRanking" onclick="toggleRanking()">🏆 Ranking Contrarreloj</button>
+
+
+<div id="ranking" style="display: none; max-width: 600px; margin-top: 20px; text-align: center; background: #fff; border: 1px solid #ccc; padding: 12px; border-radius: 10px;">
+  <label for="rankingTamano">Tamaño:</label>
+  <select id="rankingTamano" onchange="mostrarRanking()">
+    <option value="8">8x8</option>
+    <option value="9">9x9</option>
+    <option value="10">10x10</option>
+    <option value="11">11x11</option>
+  </select>
+
+  <label for="rankingTiempo">Duración:</label>
+  <select id="rankingTiempo" onchange="mostrarRanking()">
+    <option value="60">1 min</option>
+    <option value="180">3 min</option>
+    <option value="300">5 min</option>
+  </select>
+
+  <div id="rankingLista" style="margin-top: 12px;"></div>
+</div>
+
     
     
     <div id="resultado"></div>
@@ -1159,27 +1216,36 @@ function iniciarCuentaAtras() {
         tiempoRestante--;
         actualizarCronometro(tiempoRestante);
 
-        if (tiempoRestante <= 0) {
-            clearInterval(intervalo);
-            intervalo = null;
-            actualizarCronometro(0);
+      if (tiempoRestante <= 0) {
+    clearInterval(intervalo);
+    intervalo = null;
+    actualizarCronometro(0);
 
-            // Mostrar mensaje final
-            document.getElementById("cronometro").style.backgroundColor = "#ffcccc";
-            document.getElementById("mensaje").textContent = `⏱ ¡Tiempo agotado! Has completado ${tablerosResueltos} tablero(s).`;
+    // Mostrar mensaje final
+    document.getElementById("cronometro").style.backgroundColor = "#ffcccc";
+    document.getElementById("mensaje").textContent = `⏱ ¡Tiempo agotado! Has completado ${tablerosResueltos} tablero(s).`;
 
-            // Finalizar modo contrarreloj
-            modoContrarreloj = false;
-            modoContrarrelojActivo = false;
-            juegoEnCurso = false;
-            tiempo = 0; // 🔧 Evita que el cronómetro cuente hacia delante después
-
-            // 🔒 Bloquear el tablero
-            tableroBloqueado = true;
-
-            // 🔁 Mostrar botón para reiniciar contrarreloj
-            mostrarBotonReinicioContrarreloj();
+    // 🔥 GUARDAR EN RANKING SI COMPLETÓ 2 O MÁS
+    if (tablerosResueltos >= 2) {
+        const nombre = prompt("¡Buen trabajo! Escribe tu nombre para el ranking:");
+        if (nombre) {
+            guardarEnRanking(nombre, tamanoTablero, tiempoOriginalContrarreloj, tablerosResueltos);
         }
+    }
+
+    // Finalizar modo contrarreloj
+    modoContrarreloj = false;
+    modoContrarrelojActivo = false;
+    juegoEnCurso = false;
+    tiempo = 0;
+
+    // 🔒 Bloquear el tablero
+    tableroBloqueado = true;
+
+    // 🔁 Mostrar botón para reiniciar contrarreloj
+    mostrarBotonReinicioContrarreloj();
+}
+
     }, 1000);
 }
 
@@ -1235,6 +1301,53 @@ function toggleInstrucciones() {
 }
 
 
+function toggleRanking() {
+    const r = document.getElementById("ranking");
+    r.style.display = r.style.display === "none" ? "block" : "none";
+    mostrarRanking();
+}
+
+function guardarEnRanking(nombre, tamano, duracion, puntuacion) {
+    const clave = `ranking_${tamano}x${tamano}_${duracion}s`;
+    const ranking = JSON.parse(localStorage.getItem(clave)) || [];
+
+    ranking.push({ nombre, puntuacion });
+    ranking.sort((a, b) => b.puntuacion - a.puntuacion);
+    if (ranking.length > 20) ranking.length = 20;
+
+    localStorage.setItem(clave, JSON.stringify(ranking));
+}
+function mostrarRanking() {
+  const tam = document.getElementById("rankingTamano").value;
+  const dur = document.getElementById("rankingTiempo").value;
+  const clave = `ranking/${tam}x${tam}_${dur}s`;
+
+  const contenedor = document.getElementById("rankingLista");
+  contenedor.innerHTML = "<em>Cargando...</em>";
+
+  db.ref(clave)
+    .orderByChild("puntuacion")
+    .limitToLast(20)
+    .once("value", snapshot => {
+      const data = [];
+      snapshot.forEach(child => data.push(child.val()));
+
+      data.sort((a, b) => b.puntuacion - a.puntuacion);
+
+      if (data.length === 0) {
+        contenedor.innerHTML = "<em>No hay puntuaciones aún.</em>";
+        return;
+      }
+
+      contenedor.innerHTML = "<ol style='padding-left: 20px;'>";
+      data.forEach(j => {
+        contenedor.innerHTML += `<li><strong>${j.nombre}</strong>: ${j.puntuacion} tablero(s)</li>`;
+      });
+      contenedor.innerHTML += "</ol>";
+    });
+}
+
+
 
 
 
@@ -1260,8 +1373,25 @@ function toggleInstrucciones() {
         background-color: transparent;
       }
     </style>
-</body>
-</html>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDYYwQM_M5NRZKeGFWeZs_XXdlG9r_HkkM",
+    authDomain: "damas-2cfdf.firebaseapp.com",
+    databaseURL: "https://damas-2cfdf-default-rtdb.firebaseio.com",
+    projectId: "damas-2cfdf",
+    storageBucket: "damas-2cfdf.appspot.com",
+       messagingSenderId: "966769660937",
+    appId: "1:966769660937:web:d1ee9e289500c6dd2c14d8"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
 
 </body>
 
