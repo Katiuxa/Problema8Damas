@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,8 +13,8 @@
 
 
     <script>
-      if (!window.location.search.includes("v=15")) {
-    const nuevaUrl = window.location.pathname + "?v=15";
+      if (!window.location.search.includes("v=16")) {
+    const nuevaUrl = window.location.pathname + "?v=16";
     window.location.replace(nuevaUrl);
   }
 
@@ -1376,7 +1375,7 @@ function mostrarRanking() {
     const clave = `ranking/${tamano}x${tamano}_${duracion}s`;
 
     const contenedor = document.getElementById("rankingLista");
-    contenedor.innerHTML = "<em>Cargando...</em>";
+    contenedor.innerHTML = `<em>${traducciones[idiomaActual].cargando}</em>`; // ← AQUÍ el cambio
 
     db.ref(clave)
         .orderByChild("puntuacion")
@@ -1387,16 +1386,13 @@ function mostrarRanking() {
                 datos.push(child.val());
             });
 
-            // Ordenar descendente (mayor puntuación primero)
             datos.sort((a, b) => b.puntuacion - a.puntuacion);
 
             if (datos.length === 0) {
                 contenedor.innerHTML = `<em>${traducciones[idiomaActual].sinPuntuaciones}</em>`;
-
                 return;
             }
 
-            // Crear lista en HTML
             let html = "<ol style='text-align: left; padding-left: 20px;'>";
             datos.forEach((d, i) => {
                 html += `<li><strong>${d.nombre}</strong>: ${d.puntuacion}</li>`;
@@ -1405,6 +1401,7 @@ function mostrarRanking() {
             contenedor.innerHTML = html;
         });
 }
+
 
 
 
