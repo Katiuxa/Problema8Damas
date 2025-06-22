@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta name="description" content="Juego de lógica de las 8 damas. Coloca las reinas sin que se ataquen.">
 <meta name="robots" content="index, follow">
@@ -12,14 +13,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
 
 
- <!--
+ 
 <script>
-  if (!window.location.search.includes("v=16")) {
-    const nuevaUrl = window.location.pathname + "?v=16";
+  if (!window.location.search.includes("v=1")) {
+    const nuevaUrl = window.location.pathname + "?v=1";
     window.location.replace(nuevaUrl);
   }
 </script>
--->
+
     <style>
         body {
             background-color: #f0f0f0;
@@ -1047,19 +1048,19 @@ function esDamaFija(fila, col) {
         
 
         function compartir(red) {
-    const url = "https://8damas.com;
+    const url = "https://8damas.netlify.app";
     const texto = "El problema de las 8 Damas. ¿En cuánto tiempo serás capaz de resolverlo?";
     abrirRedSocial(red, url, texto);
 }
 
 function compartir(red) {
-    const url = "https://8damas.com";
+    const url = "https://8damas.netlify.app";
     const texto = "El problema de las 8 Damas. ¿En cuánto tiempo serás capaz de resolverlo?";
     abrirRedSocial(red, url, texto);
 }
 
 function compartirResultado(red) {
-    const url = "https://https://8damas.com";
+    const url = "https://8damas.netlify.app";
     const minutos = Math.floor(tiempo / 60);
     const segundos = tiempo % 60;
     let texto = `He resuelto el reto de las Damas en ${minutos}m ${segundos}s.`;
